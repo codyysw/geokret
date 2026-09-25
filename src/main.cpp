@@ -1,9 +1,12 @@
 #include <Arduino.h>
 #include <Bluepad32.h>
 
-#include "helpers.hpp"
+#include "Helpers.hpp"
+#include "GamePadInput.hpp"
 
 ControllerPtr myController = nullptr;
+GamePadInput pad;
+
 
 void onConnectedController(ControllerPtr ctl) 
 {
@@ -27,8 +30,8 @@ void onDisconnectedController(ControllerPtr ctl)
     if (myController == ctl) {
         Serial.printf("CALLBACK: Controller disconnected");
         myController = nullptr;
+        return;
     }
-    // shouldnt it ?
     Serial.println("ERROR: Unknown Controller disconnected. This should NOT display.");
 }
 
@@ -55,6 +58,11 @@ void loop()
     if (myController == nullptr or !myController->isConnected()) {
         return;
     }
-    Helpers::printPadInput(myController);
+    // Helpers::printPadInput(myController);
+    pad.updateData(myController);
+    pad.printData();
+    
     delay(150);
+
+
 }
