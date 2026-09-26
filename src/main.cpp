@@ -18,6 +18,7 @@ void onConnectedController(ControllerPtr ctl)
 
     myController = ctl;
     Serial.printf("CALLBACK: Controller is connected");
+    digitalWrite(LED_BUILTIN,HIGH);
     ControllerProperties properties = myController->getProperties();
     Serial.printf(
         "Controller model: %s, VID=0x%04x, PID=0x%04x\n", 
@@ -31,6 +32,7 @@ void onDisconnectedController(ControllerPtr ctl)
     if (myController == ctl) {
         Serial.printf("CALLBACK: Controller disconnected");
         myController = nullptr;
+        digitalWrite(LED_BUILTIN,LOW);
         return;
     }
     Serial.println("ERROR: Unknown Controller disconnected. This should NOT display.");
@@ -39,6 +41,8 @@ void onDisconnectedController(ControllerPtr ctl)
 
 void setup()
 {
+    pinMode(LED_BUILTIN, OUTPUT);
+
     Serial.begin(115200);
     Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
 
