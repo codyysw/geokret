@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Engine.hpp"
 
 void Engine::drive(int power)
@@ -47,5 +45,5 @@ void Engine::writeToMotorDriver() const
         TODO This method will be used to send real signals to motor driver
         * For now, the simulation should be implemented
     */
-   Serial.printf("E: %4d  ", currentPower);
+   Serial.printf("C: %4d, T: %4d    ", currentPower, targetPower);
 }
