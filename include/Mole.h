@@ -10,9 +10,9 @@ public:
     void tick(ControllerPtr ctl);
     void driveEngines();
     void printPadData() const;
+
 private:
     GamePadInput pad;
     Engine frontLeft;
     Engine frontRight;
-
 };

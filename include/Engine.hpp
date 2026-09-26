@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <Arduino.h>
 #include "GamePadInput.hpp"
 
@@ -13,18 +14,19 @@ public:
         BACKWARD,
         BRAKE
     };
-    Engine() : currentState{State::NEUTRAL}, currentPower{0} { }
+    Engine() : targetState{State::NEUTRAL}, currentPower{0} { }
     void drive(int power);
-    static constexpr uint MIN_POWER = 70;
-    static constexpr uint MAX_POWER = 255;
+    std::string getCurrentStateName() const;
+    static constexpr int MIN_POWER = 70;
+    static constexpr int MAX_POWER = 255;
 
 private:
     void modifyPower();
     void writeToMotorDriver() const;
     // Assumption: Engine power range is (70 ; 255)
 
-    static constexpr uint ACCELERATION_RATE = 10;
-    State currentState;
-    uint currentPower;
-    uint targetPower;
+    static constexpr int ACCELERATION_RATE = 10;
+    State targetState;
+    int currentPower;
+    int targetPower;
 };
