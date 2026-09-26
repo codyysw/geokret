@@ -9,11 +9,11 @@ public:
     void updatePos(int axisX, int axisY);
     int getX() const { return x; }
     int getY() const { return y; }
+    static constexpr int DEADZONE = 200;
 
 private:
     int x = 0;
     int y = 0;
-    static constexpr int DEADZONE = 200;
 };
 
 

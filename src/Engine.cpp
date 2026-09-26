@@ -3,18 +3,7 @@
 
 void Engine::drive(int power)
 {
-    if (power == 0) {
-        this->targetState = State::NEUTRAL;
-        this->targetPower = 0;
-    }
-    else if (power > 0) {
-        this->targetState = State::FORWARD;
-        this->targetPower = std::abs(power);
-    }
-    else {
-        this->targetState = State::BACKWARD;
-        this->targetPower = std::abs(power);
-    }
+    this->targetPower = power;
     this->modifyPower();
     this->writeToMotorDriver();
 }
@@ -27,16 +16,10 @@ void Engine::modifyPower()
         * This method should be the only place where currentPower is updated
     */
     if (currentPower < targetPower) {
-        currentPower += ACCELERATION_RATE;
-        if (currentPower > targetPower) {
-            currentPower = targetPower;
-        }
+        currentPower = std::min(currentPower + ACCELERATION_RATE, targetPower);
     } 
     else if (currentPower > targetPower) {
-        currentPower -= ACCELERATION_RATE;
-        if (currentPower < targetPower) {
-            currentPower = targetPower;
-        }
+        currentPower = std::max(currentPower - ACCELERATION_RATE, targetPower);
     }
 }
 
@@ -48,23 +31,31 @@ void Engine::writeToMotorDriver() const
     */
     Serial.printf(
         "C: %4d [%s], T: %4d [%s]   ", 
-        currentPower, getCurrentStateName().c_str(),
-        targetPower, getCurrentStateName().c_str()
+        currentPower, getStateName(getCurrentState()).c_str(),
+        targetPower, getStateName(getCurrentState()).c_str()
     );
 }
 
-
-std::string Engine::getCurrentStateName() const
+Engine::State Engine::getCurrentState() const
 {
-    switch(targetState)
+    if (currentPower > 0) {
+        return State::FORWARD;
+    }
+    if (currentPower < 0) {
+        return State::BACKWARD;
+    }
+    return State::NEUTRAL;
+}
+
+
+std::string Engine::getStateName(State state) const
+{
+    switch(state)
     {
-        case(State::FORWARD):
-            return "F";
-        case(State::BACKWARD):
-            return "B";
-        case(State::NEUTRAL):
-            return "N";
-        default:
-            return "BRAKE";
+        case(State::FORWARD): return "F";
+        case(State::BACKWARD): return "B";
+        case(State::NEUTRAL): return "N";
+        case(State::BRAKE): return "BRAKE";
+        default: return "UNKNOWN";
     }
 }

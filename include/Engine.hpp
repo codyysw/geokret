@@ -14,9 +14,10 @@ public:
         BACKWARD,
         BRAKE
     };
-    Engine() : targetState{State::NEUTRAL}, currentPower{0} { }
+    Engine() : currentPower{0} { }
     void drive(int power);
-    std::string getCurrentStateName() const;
+    State getCurrentState() const;
+    std::string getStateName(State state) const;
     static constexpr int MIN_POWER = 70;
     static constexpr int MAX_POWER = 255;
 
@@ -26,7 +27,6 @@ private:
     // Assumption: Engine power range is (70 ; 255)
 
     static constexpr int ACCELERATION_RATE = 10;
-    State targetState;
     int currentPower;
     int targetPower;
 };

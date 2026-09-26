@@ -27,10 +27,10 @@ void Mole::driveEngines()
     int mappedPower = 0;
 
     if (rawY > 0) {
-        mappedPower = map(rawY, 200, 512, Engine::MIN_POWER, Engine::MAX_POWER);
+        mappedPower = map(rawY, Joystick::DEADZONE, 512, Engine::MIN_POWER, Engine::MAX_POWER);
     }
     else if (rawY < 0) {
-        mappedPower = map(rawY, -511, -200, -Engine::MAX_POWER, -Engine::MIN_POWER);
+        mappedPower = map(rawY, -511, -Joystick::DEADZONE, -Engine::MAX_POWER, -Engine::MIN_POWER);
     }
     else {
         mappedPower = 0;
