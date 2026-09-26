@@ -5,19 +5,31 @@
 
 class Joystick
 {
+public:
+    void updatePos(int axisX, int axisY);
+    int getX() const { return x; }
+    int getY() const { return y; }
+
 private:
     int x = 0;
     int y = 0;
-    constexpr static int DEADZONE = 200;
-public:
-    void setPos(int axisX, int axisY);
-    int getX() const { return x; }
-    int getY() const { return y; }
+    static constexpr int DEADZONE = 200;
 };
 
 
 class GamePadInput 
 {
+public:
+    void processData(ControllerPtr ctl);
+    void printData() const;
+    Joystick getLeftJoystick() const { return left; }
+    Joystick getRightJoystick() const { return right; }
+    bool isXpressed() { return x; }
+    bool isYpressed() { return y; }
+    bool isBpressed() { return b; }
+    bool isApressed() { return a; }
+
+private:
     Joystick left;
     Joystick right;
 
@@ -26,7 +38,5 @@ class GamePadInput
     bool b = false;
     bool a = false;
 
-public:
-    void updateData(ControllerPtr ctl);
-    void printData() const;
+
 };

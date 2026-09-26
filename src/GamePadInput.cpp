@@ -1,6 +1,6 @@
 #include "GamePadInput.hpp"
 
-void Joystick::setPos(int axisX, int axisY)
+void Joystick::updatePos(int axisX, int axisY)
 {
     this->x = axisX;
     this->y = axisY;
@@ -13,10 +13,10 @@ void Joystick::setPos(int axisX, int axisY)
     }
 }
 
-void GamePadInput::updateData(ControllerPtr ctl)
+void GamePadInput::processData(ControllerPtr ctl)
 {
-    left.setPos(ctl->axisX(), ctl->axisY());
-    right.setPos(ctl->axisRX(), ctl->axisRY());
+    left.updatePos(ctl->axisX(), ctl->axisY());
+    right.updatePos(ctl->axisRX(), ctl->axisRY());
 
     x = ctl->x();
     y = ctl->y();

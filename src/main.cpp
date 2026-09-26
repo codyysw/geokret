@@ -1,11 +1,12 @@
 #include <Arduino.h>
 #include <Bluepad32.h>
-
 #include "Helpers.hpp"
 #include "GamePadInput.hpp"
+#include "Mole.h"
+
 
 ControllerPtr myController = nullptr;
-GamePadInput pad;
+Mole mole;
 
 
 void onConnectedController(ControllerPtr ctl) 
@@ -59,10 +60,10 @@ void loop()
         return;
     }
     // Helpers::printPadInput(myController);
-    pad.updateData(myController);
-    pad.printData();
-    
-    delay(150);
+    mole.tick(myController);
+    mole.printPadData();
+
+    delay(500);
 
 
 }
