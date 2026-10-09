@@ -7,13 +7,13 @@ class Joystick
 {
 public:
     void updatePos(int axisX, int axisY);
-    int getX() const { return x; }
-    int getY() const { return y; }
-    static constexpr int DEADZONE = 200;
+    float getX() const { return x; }
+    float getY() const { return y; }
+    static constexpr float DEADZONE = 0.2;
 
 private:
-    int x = 0;
-    int y = 0;
+    float x = 0;
+    float y = 0;
 };
 
 

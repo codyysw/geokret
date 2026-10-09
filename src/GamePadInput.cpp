@@ -2,8 +2,8 @@
 
 void Joystick::updatePos(int axisX, int axisY)
 {
-    this->x = axisX;
-    this->y = axisY;
+    this->x = constrain(axisX / 512.0f, -1.0f, 1.0f);
+    this->y = -1 * constrain(axisY / 512.0f, -1.0f, 1.0f);
 
     if (std::abs(x) < Joystick::DEADZONE) {
         x = 0;
@@ -27,7 +27,7 @@ void GamePadInput::processData(ControllerPtr ctl)
 void GamePadInput::printData() const
 {
     Serial.printf(
-        "joystick L: (%4d, %4d), joystick R: (%4d, %4d), X: %d, Y: %d, B: %d, A: %d\n",
+        "joystick L: (%2f, %2f), joystick R: (%2f, %2f), X: %d, Y: %d, B: %d, A: %d\n",
         left.getX(),
         left.getY(),
         right.getX(),
