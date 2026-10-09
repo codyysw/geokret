@@ -10,7 +10,7 @@ Engine::Engine(const EnginePins& pins)
 
 }
 
-void Engine::begin() const
+void Engine::begin()
 {
     pinMode(pins.in1, OUTPUT);
     pinMode(pins.in2, OUTPUT);

@@ -18,7 +18,7 @@ Mole::Mole()
 
 }
 
-void Mole::begin() const
+void Mole::begin()
 {
     frontLeft.begin();
     rearLeft.begin();

@@ -16,7 +16,7 @@ public:
         BACKWARD,
         BRAKE
     };
-    void begin() const;
+    void begin();
     void drive(int power);
     State getCurrentState() const;
     std::string getStateName(State state) const;
