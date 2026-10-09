@@ -41,8 +41,9 @@ void onDisconnectedController(ControllerPtr ctl)
 
 void setup()
 {
-    pinMode(LED_BUILTIN, OUTPUT);
 
+    pinMode(LED_BUILTIN, OUTPUT);
+    mole.begin();
     Serial.begin(115200);
     Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
 

@@ -1,6 +1,23 @@
 #include <string>
 #include "Engine.hpp"
 
+
+Engine::Engine(const EnginePins& pins) 
+    : pins{pins},
+      currentPower{0},
+      targetPower{0} 
+{
+
+}
+
+void Engine::begin() const
+{
+    pinMode(pins.in1, OUTPUT);
+    pinMode(pins.in2, OUTPUT);
+    pinMode(pins.pwm, OUTPUT);
+    this->writeToMotorDriver();
+}
+
 void Engine::drive(int power)
 {
     this->targetPower = power;
@@ -25,10 +42,10 @@ void Engine::modifyPower()
 
 void Engine::writeToMotorDriver() const
 {
-    /*
-        TODO This method will be used to send real signals to motor driver
-        * For now, the simulation should be implemented
-    */
+    digitalWrite(pins.in1, currentPower > 0);
+    digitalWrite(pins.in2, currentPower < 0);
+    analogWrite(pins.pwm, abs(currentPower));
+
     Serial.printf(
         "C: %4d [%s], T: %4d [%s]   ", 
         currentPower, getStateName(getCurrentState()).c_str(),

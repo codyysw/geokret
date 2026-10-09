@@ -7,6 +7,8 @@
 class Mole
 {
 public:
+    Mole();
+    void begin() const;
     void tick(ControllerPtr ctl);
     void driveEngines();
     void printPadData() const;

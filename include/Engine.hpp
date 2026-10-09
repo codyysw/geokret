@@ -3,10 +3,12 @@
 #include <string>
 #include <Arduino.h>
 #include "GamePadInput.hpp"
+#include "Config.hpp"
 
 class Engine
 {
 public:
+    explicit Engine(const EnginePins& pins);
     enum class State
     {
         NEUTRAL,
@@ -14,7 +16,7 @@ public:
         BACKWARD,
         BRAKE
     };
-    Engine() : currentPower{0} { }
+    void begin() const;
     void drive(int power);
     State getCurrentState() const;
     std::string getStateName(State state) const;
@@ -27,6 +29,7 @@ private:
     // Assumption: Engine power range is (70 ; 255)
 
     static constexpr int ACCELERATION_RATE = 10;
+    const EnginePins pins;
     int currentPower;
     int targetPower;
 };

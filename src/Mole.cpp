@@ -1,5 +1,5 @@
 #include "Mole.hpp"
-
+#include "Config.hpp"
 
 /*
 * OVERALL FLOW - HANDLED IN MULTIPLE COMPONENTS
@@ -9,6 +9,24 @@
     4. Send instructions to real engine modules
 */
 
+Mole::Mole() 
+    : frontLeft{Pins::FRONT_LEFT}, 
+      rearLeft{Pins::REAR_LEFT},
+      frontRight{Pins::FRONT_RIGHT},
+      rearRight{Pins::REAR_RIGHT}
+{
+
+}
+
+void Mole::begin() const
+{
+    frontLeft.begin();
+    rearLeft.begin();
+
+    frontRight.begin();
+    rearRight.begin();
+}
+
 void Mole::tick(ControllerPtr ctl)
 {
     pad.processData(ctl);
@@ -17,12 +35,6 @@ void Mole::tick(ControllerPtr ctl)
 
 void Mole::driveEngines()
 {
-    /*
-        TODO convert pad input into engines power:
-        * Send only power in range (MIN_POWER, MAX_POWER)
-        * Engine handles its states itself 
-        * The code below is a simplification for test purposes
-    */
     float rawY = pad.getLeftJoystick().getY();
     float rawX = pad.getLeftJoystick().getX();
 
