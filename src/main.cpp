@@ -2,7 +2,7 @@
 #include <Bluepad32.h>
 #include "Helpers.hpp"
 #include "GamePadInput.hpp"
-#include "Mole.h"
+#include "Mole.hpp"
 
 
 ControllerPtr myController = nullptr;
