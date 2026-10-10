@@ -7,7 +7,7 @@
 
 ControllerPtr myController = nullptr;
 Mole mole;
-
+constexpr int DELAY = 50;
 
 void onConnectedController(ControllerPtr ctl) 
 {
@@ -68,7 +68,7 @@ void loop()
     mole.tick(myController);
     mole.printPadData();
 
-    delay(500);
+    delay(DELAY);
 
 
 }

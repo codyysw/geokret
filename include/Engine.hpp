@@ -28,7 +28,7 @@ private:
     void writeToMotorDriver() const;
     // Assumption: Engine power range is (70 ; 255)
 
-    static constexpr int ACCELERATION_RATE = 10;
+    static constexpr int ACCELERATION_RATE = 5;
     const EnginePins pins;
     int currentPower;
     int targetPower;
