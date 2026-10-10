@@ -2,6 +2,9 @@
 
 #include <Arduino.h>
 
+const int STDBY1 = 4;
+const int STDBY2 = 27;
+
 struct EnginePins {
     const int pwm;
     const int in1;

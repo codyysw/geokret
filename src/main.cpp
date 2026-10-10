@@ -41,6 +41,11 @@ void onDisconnectedController(ControllerPtr ctl)
 
 void setup()
 {
+    pinMode(STDBY1, OUTPUT);
+    digitalWrite(STDBY1, HIGH);
+
+    pinMode(STDBY2, OUTPUT);
+    digitalWrite(STDBY2, HIGH);
 
     pinMode(LED_BUILTIN, OUTPUT);
     mole.begin();
