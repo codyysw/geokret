@@ -35,12 +35,12 @@ void Engine::modifyPower()
         return;
     }
     if (targetPower > currentPower) {
-        const float rate = (currentPower >= 0) ? ACCELERATION_RATE : DECELERATION_RATE;
-        currentPower = std::min(currentPower + rate, static_cast<float>(targetPower));
+        const int rate = (currentPower >= 0) ? ACCELERATION_RATE : DECELERATION_RATE;
+        currentPower = std::min(currentPower + rate, targetPower);
     }
     else {
-        const float rate = (currentPower <= 0) ? ACCELERATION_RATE : DECELERATION_RATE;
-        currentPower = std::max(currentPower - rate, static_cast<float>(targetPower));
+        const int rate = (currentPower <= 0) ? ACCELERATION_RATE : DECELERATION_RATE;
+        currentPower = std::max(currentPower - rate, targetPower);
     }
 }
 

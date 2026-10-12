@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Arduino.h>
+#include <algorithm>
 #include "GamePadInput.hpp"
 #include "Config.hpp"
 

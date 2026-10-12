@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Arduino.h>
+#include <utility>
+#include <tuple>
 #include "Engine.hpp"
 #include "GamePadInput.hpp"
 

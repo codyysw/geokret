@@ -89,6 +89,7 @@ std::pair<float, float> Mole::getDriveModePowers(float rawX, float rawY)
 
 std::pair<float, float> Mole::getRotationModePowers(float rawX, float rawY)
 {
+    // TODO check how the rover will behave without `+ FACTOR * rawY`
     float leftPower = Mole::POWER_FACTOR * rawY + rawX;
     float rightPower = Mole::POWER_FACTOR * rawY - rawX;
 

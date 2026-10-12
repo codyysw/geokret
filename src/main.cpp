@@ -41,6 +41,8 @@ void onDisconnectedController(ControllerPtr ctl)
 
 void setup()
 {
+    Serial.begin(115200);
+
     pinMode(STDBY1, OUTPUT);
     digitalWrite(STDBY1, HIGH);
 
@@ -49,7 +51,7 @@ void setup()
 
     pinMode(LED_BUILTIN, OUTPUT);
     mole.begin();
-    Serial.begin(115200);
+    
     Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
 
     // const uint8_t* addr = BP32.localBdAddress();
