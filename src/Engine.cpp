@@ -25,6 +25,16 @@ void Engine::drive(int power)
     this->writeToMotorDriver();
 }
 
+void Engine::stop()
+{
+    if (currentPower == 0 && targetPower == 0) {
+        return;
+    }
+    this->targetPower = 0;
+    this->currentPower = 0;
+    this->writeToMotorDriver();
+}
+
 void Engine::modifyPower()
 {
     /*
