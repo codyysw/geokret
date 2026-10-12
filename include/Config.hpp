@@ -13,8 +13,8 @@ struct EnginePins {
 
 
 namespace Pins {
-    constexpr EnginePins FRONT_LEFT  {32, 25, 26};
-    constexpr EnginePins REAR_LEFT   {23, 21, 22};
-    constexpr EnginePins FRONT_RIGHT {18, 16, 17};
-    constexpr EnginePins REAR_RIGHT  {33, 19, 27};
+    constexpr EnginePins FRONT_RIGHT  {32, 25, 26};
+    constexpr EnginePins REAR_LEFT   {23, 22, 21};
+    constexpr EnginePins FRONT_LEFT {18, 17, 16};
+    constexpr EnginePins REAR_RIGHT  {33, 27, 19};
 }

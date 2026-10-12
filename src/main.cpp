@@ -7,7 +7,7 @@
 
 ControllerPtr myController = nullptr;
 Mole mole;
-constexpr int DELAY = 50;
+constexpr int DELAY = 25;
 
 void onConnectedController(ControllerPtr ctl) 
 {

@@ -29,14 +29,24 @@ void Engine::modifyPower()
 {
     /*
         TODO apply acceleration step for engine power
-        * Think of optimal Engine::ACCELERATION_RATIO value
-        * This method should be the only place where currentPower is updated
+        * Specific ACC and DEC values to be tested live.
+        ? Simplify this code complexity
     */
-    if (currentPower < targetPower) {
-        currentPower = std::min(currentPower + ACCELERATION_RATE, targetPower);
-    } 
-    else if (currentPower > targetPower) {
-        currentPower = std::max(currentPower - ACCELERATION_RATE, targetPower);
+    if (currentPower > 0) {
+        if (currentPower < targetPower) {
+            currentPower = std::min(currentPower + ACCELERATION_RATE, targetPower);
+        }
+        else if (currentPower > targetPower) {
+            currentPower = std::max(currentPower - DECELERATION_RATE, targetPower);
+        }
+    }
+    else {
+                if (currentPower < targetPower) {
+            currentPower = std::min(currentPower + DECELERATION_RATE, targetPower);
+        }
+        else if (currentPower > targetPower) {
+            currentPower = std::max(currentPower - ACCELERATION_RATE, targetPower);
+        }
     }
 }
 

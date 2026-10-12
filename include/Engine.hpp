@@ -20,15 +20,15 @@ public:
     void drive(int power);
     State getCurrentState() const;
     std::string getStateName(State state) const;
-    static constexpr int MIN_POWER = 70;
+    static constexpr int MIN_POWER = 20;
     static constexpr int MAX_POWER = 255;
-
+    
 private:
     void modifyPower();
     void writeToMotorDriver() const;
-    // Assumption: Engine power range is (70 ; 255)
-
     static constexpr int ACCELERATION_RATE = 5;
+    static constexpr int DECELERATION_RATE = 20;
+    
     const EnginePins pins;
     int currentPower;
     int targetPower;
