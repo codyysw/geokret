@@ -30,23 +30,17 @@ void Engine::modifyPower()
     /*
         TODO apply acceleration step for engine power
         * Specific ACC and DEC values to be tested live.
-        ? Simplify this code complexity
     */
-    if (currentPower > 0) {
-        if (currentPower < targetPower) {
-            currentPower = std::min(currentPower + ACCELERATION_RATE, targetPower);
-        }
-        else if (currentPower > targetPower) {
-            currentPower = std::max(currentPower - DECELERATION_RATE, targetPower);
-        }
+    if (currentPower == targetPower) {
+        return;
+    }
+    if (targetPower > currentPower) {
+        const float rate = (currentPower >= 0) ? ACCELERATION_RATE : DECELERATION_RATE;
+        currentPower = std::min(currentPower + rate, static_cast<float>(targetPower));
     }
     else {
-                if (currentPower < targetPower) {
-            currentPower = std::min(currentPower + DECELERATION_RATE, targetPower);
-        }
-        else if (currentPower > targetPower) {
-            currentPower = std::max(currentPower - ACCELERATION_RATE, targetPower);
-        }
+        const float rate = (currentPower <= 0) ? ACCELERATION_RATE : DECELERATION_RATE;
+        currentPower = std::max(currentPower - rate, static_cast<float>(targetPower));
     }
 }
 
