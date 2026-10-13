@@ -3,10 +3,12 @@
 #include "Helpers.hpp"
 #include "GamePadInput.hpp"
 #include "Mole.hpp"
-
+#include "WebTuner.hpp"
 
 ControllerPtr myController = nullptr;
 Mole mole;
+WebTuner tuner{80};
+
 constexpr int DELAY = 25;
 
 void onConnectedController(ControllerPtr ctl) 
@@ -43,6 +45,7 @@ void onDisconnectedController(ControllerPtr ctl)
 void setup()
 {
     Serial.begin(115200);
+    tuner.setup();
 
     pinMode(STDBY1, OUTPUT);
     digitalWrite(STDBY1, HIGH);
@@ -67,11 +70,13 @@ void setup()
 
 void loop()
 {
+    tuner.tick();
     bool dataUpdated = BP32.update(); 
 
     if (myController == nullptr or !myController->isConnected()) {
         return;
     }
+    
     // Helpers::printPadInput(myController);
     mole.tick(myController);
     mole.printPadData();
