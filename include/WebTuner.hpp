@@ -3,6 +3,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Preferences.h>
+#include "Engine.hpp"
 
 # ifndef ENABLE_WEB_TUNER
     class WebTuner {
@@ -20,10 +21,10 @@
         WebTuner(int port);
         void setup();
         void tick();
-        float getAcc() const { return acc; }
-        float getDec() const { return dec; }
-        void setAcc(float newAcc) { this->acc = newAcc; }
-        void setDec(float newDec) { this->dec = newDec; }
+        float getAcc() const { return Engine::ACCELERATION_RATE; }
+        float getDec() const { return Engine::DECELERATION_RATE; }
+        void setAcc(float newAcc) { Engine::ACCELERATION_RATE = newAcc; }
+        void setDec(float newDec) { Engine::DECELERATION_RATE = newDec; }
 
         void print() const;
     private:

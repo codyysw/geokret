@@ -11,8 +11,8 @@ class Engine
 public: // CONFIGURABLE CONSTANTS
     static constexpr int MIN_POWER = 20;
     static constexpr int MAX_POWER = 255;
-    static constexpr int ACCELERATION_RATE = 5;
-    static constexpr int DECELERATION_RATE = 20;
+    inline static volatile int ACCELERATION_RATE = 5;
+    inline static volatile int DECELERATION_RATE = 20;
 public:
     explicit Engine(const EnginePins& pins);
     enum class State

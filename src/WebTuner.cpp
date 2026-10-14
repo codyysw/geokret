@@ -2,7 +2,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-
+# ifdef ENABLE_WEB_TUNER
 WebTuner::WebTuner(int port) : server(port)
 {
 
@@ -52,3 +52,5 @@ void WebTuner::print() const
 {
     Serial.printf("[TUNER] acc = %.1f, dec = %.1f\n", getAcc(), getDec());
 }
+
+#endif
