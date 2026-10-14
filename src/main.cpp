@@ -33,6 +33,7 @@ void onDisconnectedController(ControllerPtr ctl)
         Serial.printf("CALLBACK: Controller disconnected");
         myController = nullptr;
         digitalWrite(LED_BUILTIN,LOW);
+        mole.emergencyStop();
         return;
     }
     Serial.println("ERROR: Unknown Controller disconnected. This should NOT display.");

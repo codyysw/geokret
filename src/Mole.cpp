@@ -33,6 +33,14 @@ void Mole::tick(ControllerPtr ctl)
     driveEngines();
 }
 
+void Mole::emergencyStop()
+{
+    frontLeft.stop();
+    frontRight.stop();
+    rearLeft.stop();
+    rearRight.stop();
+}
+
 void Mole::driveEngines()
 {
     float rawY = pad.getLeftJoystick().getY();

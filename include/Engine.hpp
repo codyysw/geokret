@@ -19,6 +19,7 @@ public:
     };
     void begin();
     void drive(int power);
+    void stop();
     State getCurrentState() const;
     std::string getStateName(State state) const;
     static constexpr int MIN_POWER = 20;

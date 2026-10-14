@@ -13,6 +13,7 @@ public:
     void begin();
     void tick(ControllerPtr ctl);
     void driveEngines();
+    void emergencyStop();
     void printPadData() const;
 
 private:
