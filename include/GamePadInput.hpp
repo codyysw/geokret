@@ -5,11 +5,12 @@
 
 class Joystick
 {
+public: // CONFIGURABLE CONSTANTS
+    static constexpr float DEADZONE = 0.2;
 public:
     void updatePos(int axisX, int axisY);
     float getX() const { return x; }
     float getY() const { return y; }
-    static constexpr float DEADZONE = 0.2;
 
 private:
     float x = 0;
