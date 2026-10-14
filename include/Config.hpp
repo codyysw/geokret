@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 const int STDBY1 = 13;
-const int STDBY2 = 14;
+const int STDBY2 = 19;
 
 struct EnginePins {
     const int pwm;
@@ -13,8 +13,8 @@ struct EnginePins {
 
 
 namespace Pins {
-    constexpr EnginePins FRONT_RIGHT  {32, 25, 26};
+    constexpr EnginePins FRONT_RIGHT  {32, 25, 33};
     constexpr EnginePins REAR_LEFT   {23, 22, 21};
-    constexpr EnginePins FRONT_LEFT {18, 17, 16};
-    constexpr EnginePins REAR_RIGHT  {33, 27, 19};
+    constexpr EnginePins FRONT_LEFT {17, 18, 16};
+    constexpr EnginePins REAR_RIGHT  {26, 27, 14};
 }
