@@ -74,6 +74,9 @@ void Mole::driveEngines()
 
 std::pair<float, float> Mole::getDriveModePowers(float rawX, float rawY)
 {
+    if (rawY < 0) {
+        rawX = -rawX;
+    }
     // * classic arcade. Flaw: turn radius is reversed proportional to speed. 
     // * It might be unintuitive. 
     // * Also, no guarantee of no-backward power on sharp turns.
