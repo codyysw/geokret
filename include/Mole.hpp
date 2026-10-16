@@ -9,8 +9,8 @@
 class Mole
 {
 public: // CONFIGURABLE CONSTANTS
-    static constexpr float TURN_FACTOR = 0.6;
-    static constexpr float POWER_FACTOR = 0.1;
+    inline static volatile float TURN_FACTOR = 0.6;
+    inline static volatile float POWER_FACTOR = 0.1;
 public:
     Mole();
     void begin();

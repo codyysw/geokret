@@ -4,6 +4,7 @@
 #include <WebServer.h>
 #include <Preferences.h>
 #include "Engine.hpp"
+#include  "Mole.hpp"
 
 # ifndef ENABLE_WEB_TUNER
     class WebTuner {
@@ -25,6 +26,11 @@
         float getDec() const { return Engine::DECELERATION_RATE; }
         void setAcc(float newAcc) { Engine::ACCELERATION_RATE = newAcc; }
         void setDec(float newDec) { Engine::DECELERATION_RATE = newDec; }
+
+        float getTurnFac() const { return Mole::TURN_FACTOR; }
+        float getPowFac() const { return Mole::POWER_FACTOR; }
+        void setTurnFac(float newTurn) { Mole::TURN_FACTOR = newTurn; }
+        void setPowFac(float newPow) { Mole::POWER_FACTOR = newPow; }
 
         void print() const;
     private:
@@ -51,53 +57,61 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
   body { font-family: sans-serif; max-width: 480px; margin: 20px auto; padding: 0 16px; }
   .row { margin: 24px 0; }
   input[type=range] { width: 100%; }
-  button { padding: 10px 20px; font-size: 16px; }
   #status { color: #666; margin-top: 12px; }
 </style>
 </head>
 <body>
   <h2>Motor tuning</h2>
-
-  <div class="row">
-    <label>Acceleration rate: <b id="accVal"></b></label>
-    <input type="range" id="acc" min="0.1" max="50" step="0.1">
-  </div>
-
-  <div class="row">
-    <label>Deceleration rate: <b id="decVal"></b></label>
-    <input type="range" id="dec" min="0.1" max="50" step="0.1">
-  </div>
-
-
+  <div id="sliders"></div>
+  <div id="status"></div>
+ 
 <script>
-const acc = document.getElementById('acc');
-const dec = document.getElementById('dec');
-const accVal = document.getElementById('accVal');
-const decVal = document.getElementById('decVal');
-const statusEl = document.getElementById('status');
-let timer = null;
-
-function show() { accVal.textContent = acc.value; decVal.textContent = dec.value; }
-
-function send() {
-  fetch(`/set?acc=${acc.value}&dec=${dec.value}`)
+// min/max/step are placeholders for turn and pow, set them to your real ranges
+const params = [
+  { key: 'acc',  label: 'Acceleration rate', min: 0.1, max: 50, step: 0.1  },
+  { key: 'dec',  label: 'Deceleration rate', min: 0.1, max: 50, step: 0.1  },
+  { key: 'turn', label: 'Turn factor',       min: 0,   max: 1,  step: 0.01 },
+  { key: 'pow',  label: 'Power factor',      min: 0,   max: 1,  step: 0.01 },
+];
+ 
+const statusEl  = document.getElementById('status');
+const container = document.getElementById('sliders');
+const inputs = {};
+const valEls = {};
+const timers = {};
+ 
+// sends only the slider that changed, so other values are never overwritten
+function send(key) {
+  fetch(`/set?${key}=${inputs[key].value}`)
     .then(() => statusEl.textContent = 'Applied')
     .catch(() => statusEl.textContent = 'Connection error');
 }
-
-// throttle so we don't flood the ESP while dragging
-function onChange() {
-  show();
-  clearTimeout(timer);
-  timer = setTimeout(send, 80);
-}
-
-acc.oninput = onChange;
-dec.oninput = onChange;
-
+ 
+params.forEach(p => {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML =
+    `<label>${p.label}: <b></b></label>
+     <input type="range" min="${p.min}" max="${p.max}" step="${p.step}">`;
+  container.appendChild(row);
+ 
+  inputs[p.key] = row.querySelector('input');
+  valEls[p.key] = row.querySelector('b');
+ 
+  // throttle so we don't flood the ESP while dragging
+  inputs[p.key].oninput = () => {
+    valEls[p.key].textContent = inputs[p.key].value;
+    clearTimeout(timers[p.key]);
+    timers[p.key] = setTimeout(() => send(p.key), 80);
+  };
+});
+ 
 // load current values from the ESP on page open
 fetch('/get').then(r => r.json()).then(d => {
-  acc.value = d.acc; dec.value = d.dec; show();
+  params.forEach(p => {
+    inputs[p.key].value = d[p.key];
+    valEls[p.key].textContent = inputs[p.key].value;
+  });
 });
 </script>
 </body>

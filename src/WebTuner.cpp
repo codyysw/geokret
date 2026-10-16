@@ -31,10 +31,13 @@ void WebTuner::handleRoot()
     server.send_P(200, "text/html", INDEX_HTML);
 }
 
-void WebTuner::handleGet() {
-  String json = "{\"acc\":" + String(getAcc(), 2) +
-                ",\"dec\":" + String(getDec(), 2) + "}";
-  server.send(200, "application/json", json);
+void WebTuner::handleGet()
+{
+    String json = "{\"acc\":"   + String(getAcc(), 2) +
+                  ",\"dec\":"   + String(getDec(), 2) +
+                  ",\"turn\":"  + String(getTurnFac(), 2) +
+                  ",\"pow\":"   + String(getPowFac(), 2) + "}";
+    server.send(200, "application/json", json);
 }
 
 void WebTuner::handleSet()
@@ -45,12 +48,19 @@ void WebTuner::handleSet()
     if (server.hasArg("dec")) {
         this->setDec( constrain(server.arg("dec").toFloat(), 0.1f, 50.0f) );
     }
+    if (server.hasArg("turn")) {
+        this->setTurnFac( constrain(server.arg("turn").toFloat(), 0.0f, 1.0f) );
+    }
+    if (server.hasArg("pow")) {
+        this->setPowFac( constrain(server.arg("pow").toFloat(), 0.0f, 1.0f) );
+    }
     server.send(200, "text/plain", "OK");
 }
 
+
 void WebTuner::print() const
 {
-    Serial.printf("[TUNER] acc = %.1f, dec = %.1f\n", getAcc(), getDec());
+    Serial.printf("[TUNER] acc = %.1f, dec = %.1f, turn = %.1f, pow = %.1f\n", getAcc(), getDec(), getTurnFac(), getPowFac());
 }
 
 #endif
