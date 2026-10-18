@@ -37,10 +37,6 @@ void Engine::stop()
 
 void Engine::modifyPower()
 {
-    /*
-        TODO apply acceleration step for engine power
-        * Specific ACC and DEC values to be tested live.
-    */
     if (currentPower == targetPower) {
         return;
     }

@@ -1,9 +1,6 @@
 #pragma once
 
-#include <Arduino.h>
-
-const int STDBY1 = 13;
-const int STDBY2 = 19;
+constexpr int DELAY = 25;
 
 struct EnginePins {
     const int pwm;
