@@ -44,12 +44,6 @@ void setup()
 {
     Serial.begin(115200);
 
-    pinMode(STDBY1, OUTPUT);
-    digitalWrite(STDBY1, HIGH);
-
-    pinMode(STDBY2, OUTPUT);
-    digitalWrite(STDBY2, HIGH);
-
     pinMode(LED_BUILTIN, OUTPUT);
     mole.begin();
     
@@ -77,6 +71,4 @@ void loop()
     mole.printPadData();
 
     delay(DELAY);
-
-
 }
