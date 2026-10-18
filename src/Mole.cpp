@@ -74,37 +74,35 @@ void Mole::driveEngines()
 
 std::pair<float, float> Mole::getDriveModePowers(float rawX, float rawY)
 {
-    if (rawY < 0) {
-        rawX = -rawX;
+    float x = applyCurve(rawX);
+    float y = applyCurve(rawY);
+    if (y < 0) {
+        x = -x;
     }
-    // * classic arcade. Flaw: turn radius is reversed proportional to speed. 
-    // * It might be unintuitive. 
-    // * Also, no guarantee of no-backward power on sharp turns.
-    float leftPower = rawY + (rawX * Mole::TURN_FACTOR);
-    float rightPower = rawY - (rawX * Mole::TURN_FACTOR);
+
+    float leftPower = y + (x * Mole::TURN_FACTOR);
+    float rightPower = y - (x * Mole::TURN_FACTOR);
     
-    // * car-like. Huge flaw: on X = MAX, Y = 0, it does not turn !
-    // float leftPower = rawY + (fabsf(rawY) * rawX * Mole::TURN_FACTOR);
-    // float rightPower = rawY - (fabsf(rawY) * rawX * Mole::TURN_FACTOR);
-
-    // * CLANKER HYBRID, I have no understanding of that
-    // const float TURN_BASE = 0.4f;
-    // float turn = rawX * Mole::POWER_FACTOR * 
-    // (TURN_BASE + (1.0f - TURN_BASE) * fabsf(rawY));
-
-    // float leftPower  = y + turn;
-    // float rightPower = y - turn;
+    float maxPower = std::max(std::abs(leftPower), std::abs(rightPower));
+    if (maxPower > 1.0f) {
+        leftPower  /= maxPower;
+        rightPower /= maxPower;
+    }
 
     return {leftPower, rightPower};
 }
 
 std::pair<float, float> Mole::getRotationModePowers(float rawX, float rawY)
 {
-    // TODO check how the rover will behave without `+ FACTOR * rawY`
-    float leftPower = Mole::POWER_FACTOR * rawY + rawX;
-    float rightPower = Mole::POWER_FACTOR * rawY - rawX;
+    float leftPower = Mole::POWER_FACTOR * rawX;
+    float rightPower = Mole::POWER_FACTOR * (-rawX);
 
     return {leftPower, rightPower};
+}
+
+float Mole::applyCurve(float v)
+{
+    return v * std::abs(v);
 }
 
 int Mole::toMotorPower(float power) {

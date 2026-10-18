@@ -6,7 +6,7 @@
 class Joystick
 {
 public: // CONFIGURABLE CONSTANTS
-    static constexpr float DEADZONE = 0.2;
+    static constexpr float DEADZONE = 0.1;
 public:
     void updatePos(int axisX, int axisY);
     float getX() const { return x; }

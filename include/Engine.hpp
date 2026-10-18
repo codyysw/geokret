@@ -9,10 +9,10 @@
 class Engine
 {
 public: // CONFIGURABLE CONSTANTS
-    static constexpr int MIN_POWER = 20;
+    static constexpr int MIN_POWER = 15;
     static constexpr int MAX_POWER = 255;
-    static constexpr int ACCELERATION_RATE = 5;
-    static constexpr int DECELERATION_RATE = 20;
+    static constexpr int ACCELERATION_RATE = 10;
+    static constexpr int DECELERATION_RATE = 40;
 public:
     explicit Engine(const EnginePins& pins);
     enum class State
