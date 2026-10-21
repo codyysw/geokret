@@ -48,7 +48,7 @@ void Mole::driveEngines()
 
     float leftPower = 0, rightPower = 0;
 
-    if (pad.isXpressed()) {
+    if (pad.getX().isDown()) {
         std::tie(leftPower, rightPower) = getRotationModePowers(rawX, rawY);
     }
     else {
