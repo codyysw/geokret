@@ -17,27 +17,42 @@ private:
     float y = 0;
 };
 
+class Button
+{
+public:
+    void update(bool newState) {
+        prevState = currentState;
+        currentState = newState;
+    }
+    bool justPushed() const { return (not prevState and currentState); }
+    bool justReleased() const { return (prevState and not currentState); }
+    bool isDown() const { return (prevState and currentState); }
+private:
+    bool currentState = false;
+    bool prevState = false;
+};
+
 
 class GamePadInput 
 {
 public:
     void processData(ControllerPtr ctl);
     void printData() const;
-    Joystick getLeftJoystick() const { return left; }
-    Joystick getRightJoystick() const { return right; }
-    bool isXpressed() { return x; }
-    bool isYpressed() { return y; }
-    bool isBpressed() { return b; }
-    bool isApressed() { return a; }
+    const Joystick& getLeftJoystick() const { return left; }
+    const Joystick& getRightJoystick() const { return right; }
+    const Button& getX() { return x; }
+    const Button& getY() { return y; }
+    const Button& getB() { return b; }
+    const Button& getA() { return a; }
 
 private:
     Joystick left;
     Joystick right;
 
-    bool x = false;
-    bool y = false;
-    bool b = false;
-    bool a = false;
+    Button x;
+    Button y;
+    Button b;
+    Button a;
 
 
 };

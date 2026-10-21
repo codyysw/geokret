@@ -18,10 +18,10 @@ void GamePadInput::processData(ControllerPtr ctl)
     left.updatePos(ctl->axisX(), ctl->axisY());
     right.updatePos(ctl->axisRX(), ctl->axisRY());
 
-    x = ctl->x();
-    y = ctl->y();
-    b = ctl->b();
-    a = ctl->a();
+    x.update(ctl->x());
+    y.update(ctl->y());
+    b.update(ctl->b());
+    a.update(ctl->a());
 }
 
 void GamePadInput::printData() const
