@@ -29,7 +29,7 @@ void Mole::begin()
 
 void Mole::tick(ControllerPtr ctl)
 {
-    pad.processData(ctl);
+    ctx.update(ctl);
     driveEngines();
 }
 
@@ -43,24 +43,24 @@ void Mole::emergencyStop()
 
 void Mole::driveEngines()
 {
-    float rawY = pad.getLeftJoystick().getY();
-    float rawX = pad.getLeftJoystick().getX();
+    float rawY = ctx.pad.getLeftJoystick().getY();
+    float rawX = ctx.pad.getLeftJoystick().getX();
 
-    float leftPower = 0, rightPower = 0;
+    DriveCommand command;
 
-    if (pad.getX().isDown()) {
-        std::tie(leftPower, rightPower) = getRotationModePowers(rawX, rawY);
+    if (ctx.pad.buttonX().isDown()) {
+        command = getRotationModePowers(rawX, rawY);
     }
     else {
-        std::tie(leftPower, rightPower) = getDriveModePowers(rawX, rawY);
+        command = getDriveModePowers(rawX, rawY);
     }
 
-    float normFactor = max(1.0f, max(fabsf(leftPower), fabsf(rightPower)));
-    leftPower /= normFactor;
-    rightPower /= normFactor;
+    float normFactor = max(1.0f, max(fabsf(command.left), fabsf(command.right)));
+    command.left /= normFactor;
+    command.right /= normFactor;
 
-    int leftPowerForMotor = Mole::toMotorPower(leftPower);
-    int rightPowerForMotor = Mole::toMotorPower(rightPower);
+    int leftPowerForMotor = Mole::toMotorPower(command.left);
+    int rightPowerForMotor = Mole::toMotorPower(command.right);
     
     frontLeft.drive(leftPowerForMotor);
     rearLeft.drive(leftPowerForMotor);
@@ -72,7 +72,7 @@ void Mole::driveEngines()
     Serial.println();
 }
 
-std::pair<float, float> Mole::getDriveModePowers(float rawX, float rawY)
+DriveCommand Mole::getDriveModePowers(float rawX, float rawY)
 {
     float x = applyCurve(rawX);
     float y = applyCurve(rawY);
@@ -92,7 +92,7 @@ std::pair<float, float> Mole::getDriveModePowers(float rawX, float rawY)
     return {leftPower, rightPower};
 }
 
-std::pair<float, float> Mole::getRotationModePowers(float rawX, float rawY)
+DriveCommand Mole::getRotationModePowers(float rawX, float rawY)
 {
     float leftPower = Mole::POWER_FACTOR * rawX;
     float rightPower = Mole::POWER_FACTOR * (-rawX);
@@ -117,5 +117,5 @@ int Mole::toMotorPower(float power) {
 
 void Mole::printPadData() const
 {
-    pad.printData();
+    ctx.pad.printData();
 }
