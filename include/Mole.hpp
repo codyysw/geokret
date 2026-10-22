@@ -5,6 +5,7 @@
 #include <tuple>
 #include "Engine.hpp"
 #include "GamePadInput.hpp"
+#include "DriveMode.hpp"
 
 class Mole
 {
@@ -20,12 +21,12 @@ public:
     void printPadData() const;
 
 private:
-    std::pair<float, float> getDriveModePowers(float rawX, float rawY);
-    std::pair<float, float> getRotationModePowers(float rawX, float rawY);
+    DriveCommand getDriveModePowers(float rawX, float rawY);
+    DriveCommand getRotationModePowers(float rawX, float rawY);
     static float applyCurve(float v);
     static int toMotorPower(float power);
 
-    GamePadInput pad;
+    DriveContext ctx;
     Engine frontLeft;
     Engine rearLeft;
     Engine frontRight;
