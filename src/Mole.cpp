@@ -68,7 +68,7 @@ bool Mole::isModeToChange() const
 
 void Mole::driveEngines()
 {
-    DriveCommand command = currentMode->calculatePower(this->ctx);
+    DriveCommand command = normalize(currentMode->calculatePower(this->ctx));
 
     int leftPowerForMotor = Mole::toMotorPower(command.left);
     int rightPowerForMotor = Mole::toMotorPower(command.right);
@@ -78,6 +78,18 @@ void Mole::driveEngines()
 
     frontRight.drive(rightPowerForMotor);
     rearRight.drive(rightPowerForMotor);
+}
+
+DriveCommand Mole::normalize(const DriveCommand& cmd)
+{
+    const float norm = std::max(
+        1.0f,
+        std::max(
+            fabsf(cmd.left),
+            fabsf(cmd.right)
+        )
+    );
+    return DriveCommand{cmd.left / norm, cmd.right / norm};
 }
 
 int Mole::toMotorPower(float power) {

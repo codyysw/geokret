@@ -21,6 +21,7 @@ private:
     void handleModeSwitching();
     bool isModeToChange() const;
     void driveEngines();
+    static DriveCommand normalize(const DriveCommand& cmd);
     static int toMotorPower(float power);
     ManualDriver manual;
     NaiveAutonomous autonomous;

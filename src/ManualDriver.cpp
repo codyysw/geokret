@@ -31,12 +31,6 @@ DriveCommand ManualDriver::getDriveModePowers(float rawX, float rawY) const
 
     float leftPower = y + (x * ManualDriver::TURN_FACTOR);
     float rightPower = y - (x * ManualDriver::TURN_FACTOR);
-    
-    float maxPower = std::max(std::abs(leftPower), std::abs(rightPower));
-    if (maxPower > 1.0f) {
-        leftPower  /= maxPower;
-        rightPower /= maxPower;
-    }
 
     return DriveCommand{leftPower, rightPower};
 }
