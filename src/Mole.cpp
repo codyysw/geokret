@@ -4,7 +4,7 @@
 Mole::Mole() 
     : manual{},
       autonomous{},
-      currentMode{&autonomous},
+      currentMode{&manual},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
       frontRight{Pins::FRONT_RIGHT},
@@ -35,6 +35,25 @@ void Mole::emergencyStop()
     frontRight.stop();
     rearLeft.stop();
     rearRight.stop();
+}
+
+void Mole::handleModeSwitching()
+{
+    if (not isModeToChange()) {
+        return;
+    }
+
+    if (currentMode = &manual) {
+        currentMode = &autonomous;
+        return;
+    }
+    currentMode = &manual;
+}
+
+bool Mole::isModeToChange() const
+{
+    // switching mode on pushing Y button
+    return ctx.pad.buttonY().justPushed();
 }
 
 void Mole::driveEngines()

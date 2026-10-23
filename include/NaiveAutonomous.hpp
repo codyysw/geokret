@@ -13,6 +13,7 @@ public:
     void begin() override;
     DriveCommand calculatePower(const DriveContext& ctx) override;
 private:
+    void handleStateSwitching();
     DriveCommand handleForwardMode();
     DriveCommand handleBackwardMode();
     DriveCommand handleStoppingMode();

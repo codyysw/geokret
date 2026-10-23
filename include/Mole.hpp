@@ -18,6 +18,8 @@ public:
     void printData() const;
     Mole(const Mole&) = delete;
 private:
+    void handleModeSwitching();
+    bool isModeToChange() const;
     void driveEngines();
     static int toMotorPower(float power);
     ManualDriver manual;

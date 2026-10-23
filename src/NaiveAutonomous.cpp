@@ -18,42 +18,45 @@ void NaiveAutonomous::begin()
 
 DriveCommand NaiveAutonomous::calculatePower(const DriveContext& ctx)
 {
-    if (timer >= CLOCK_SWITCH) {
-        State currentCopy = currentState;
-        switch(currentState) 
-        {
-            case (State::FORWARD):
-                currentState = State::STOPPED;
-                break;
-            case (State::BACKWARD):
-                currentState = State::STOPPED;
-                break;
-            default:
-                if (prevState == State::FORWARD) {
-                    currentState = State::BACKWARD;
-                }
-                else if (prevState == State::BACKWARD) {
-                    currentState = State::FORWARD;
-                }
-                else {
-                    currentState = State::STOPPED;
-                }
-        }
-        prevState = currentCopy;
-    }
-
     timer += 1;
     switch (currentState)
     {
-        case State::FORWARD:
+        case (State::FORWARD):
             return handleForwardMode();
-        case State::BACKWARD:
+        case (State::BACKWARD):
             return handleBackwardMode();
         default:
             return handleStoppingMode();
     }
 }
 
+void NaiveAutonomous::handleStateSwitching()
+{
+    if (timer < CLOCK_SWITCH) {
+        return;
+    }
+    
+    State currentCopy = currentState;
+    switch(currentState)
+    {
+        case (State::FORWARD):
+            currentState = State::STOPPED;
+            break;
+        case (State::BACKWARD):
+            currentState = State::STOPPED;
+            break;
+        default:
+            if (prevState == State::BACKWARD) 
+            {
+                currentState = State::FORWARD;
+            }
+            else 
+            {
+                currentState = State::FORWARD;
+            }
+    }
+    prevState = currentCopy;
+}
 
 DriveCommand NaiveAutonomous::handleForwardMode()
 {
