@@ -61,6 +61,7 @@ void Engine::writeToMotorDriver() const
         currentPower, getStateName(getCurrentState()).c_str(),
         targetPower, getStateName(getCurrentState()).c_str()
     );
+    Serial.println();
 }
 
 Engine::State Engine::getCurrentState() const
