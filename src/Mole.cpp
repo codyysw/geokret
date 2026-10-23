@@ -3,14 +3,15 @@
 
 Mole::Mole() 
     : manual{},
-      currentMode{&manual},
+      autonomous{},
+      currentMode{&autonomous},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
       frontRight{Pins::FRONT_RIGHT},
       rearRight{Pins::REAR_RIGHT}
 
 {
-
+    currentMode->begin();
 }
 
 void Mole::begin()
