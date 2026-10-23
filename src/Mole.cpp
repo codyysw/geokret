@@ -3,6 +3,7 @@
 
 Mole::Mole() 
     : manual{},
+      autonomous{},
       currentMode{&manual},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
@@ -10,11 +11,13 @@ Mole::Mole()
       rearRight{Pins::REAR_RIGHT}
 
 {
-
+    
 }
 
 void Mole::begin()
 {
+    currentMode->begin();
+    
     frontLeft.begin();
     rearLeft.begin();
 
@@ -25,6 +28,7 @@ void Mole::begin()
 void Mole::tick(ControllerPtr ctl)
 {
     ctx.update(ctl);
+    handleModeSwitching();
     driveEngines();
 }
 
@@ -34,6 +38,29 @@ void Mole::emergencyStop()
     frontRight.stop();
     rearLeft.stop();
     rearRight.stop();
+}
+
+void Mole::handleModeSwitching()
+{
+    if (not isModeToChange()) {
+        return;
+    }
+
+    if (currentMode == &manual) {
+        Serial.println("SWITCH TO AUTO");
+        currentMode = &autonomous;
+    }
+    else {
+        Serial.println("SWITCH TO MANUAL");
+        currentMode = &manual;
+    }
+    currentMode->begin();
+}
+
+bool Mole::isModeToChange() const
+{
+    // switching mode on pushing Y button
+    return ctx.pad.buttonY().justPushed();
 }
 
 void Mole::driveEngines()

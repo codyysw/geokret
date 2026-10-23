@@ -6,6 +6,7 @@
 #include "Engine.hpp"
 #include "IDriveMode.hpp"
 #include "ManualDriver.hpp"
+#include "NaiveAutonomous.hpp"
 
 class Mole
 {
@@ -17,9 +18,12 @@ public:
     void printData() const;
     Mole(const Mole&) = delete;
 private:
+    void handleModeSwitching();
+    bool isModeToChange() const;
     void driveEngines();
     static int toMotorPower(float power);
     ManualDriver manual;
+    NaiveAutonomous autonomous;
     IDriveMode* currentMode;
     DriveContext ctx;
     Engine frontLeft;

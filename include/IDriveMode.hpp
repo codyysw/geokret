@@ -25,5 +25,6 @@ class IDriveMode
 public:
     IDriveMode() = default;
     virtual ~IDriveMode() = default;
+    virtual void begin() { }
     virtual DriveCommand calculatePower(const DriveContext& ctx) = 0;
 };
