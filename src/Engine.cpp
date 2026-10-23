@@ -76,7 +76,7 @@ Engine::State Engine::getCurrentState() const
 }
 
 
-std::string Engine::getStateName(State state) const
+const char* Engine::getStateName(State state)
 {
     switch(state)
     {
