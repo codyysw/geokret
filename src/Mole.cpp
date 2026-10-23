@@ -1,25 +1,23 @@
 #include "Mole.hpp"
 #include "Config.hpp"
 
-/*
-* OVERALL FLOW - HANDLED IN MULTIPLE COMPONENTS
-    1. load ctl to GamePadInput
-    2. Process input into engine instructions
-    3. Update engine states
-    4. Send instructions to real engine modules
-*/
-
 Mole::Mole() 
-    : frontLeft{Pins::FRONT_LEFT}, 
+    : manual{},
+      autonomous{},
+      currentMode{&manual},
+      frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
       frontRight{Pins::FRONT_RIGHT},
       rearRight{Pins::REAR_RIGHT}
-{
 
+{
+    
 }
 
 void Mole::begin()
 {
+    currentMode->enter();
+    
     frontLeft.begin();
     rearLeft.begin();
 
@@ -30,6 +28,7 @@ void Mole::begin()
 void Mole::tick(ControllerPtr ctl)
 {
     ctx.update(ctl);
+    handleModeSwitching();
     driveEngines();
 }
 
@@ -39,25 +38,37 @@ void Mole::emergencyStop()
     frontRight.stop();
     rearLeft.stop();
     rearRight.stop();
+
+    currentMode = &manual;
+    currentMode->enter();
+}
+
+void Mole::handleModeSwitching()
+{
+    if (not isModeToChange()) {
+        return;
+    }
+
+    if (currentMode == &manual) {
+        Serial.println("SWITCH TO AUTO");
+        currentMode = &autonomous;
+    }
+    else {
+        Serial.println("SWITCH TO MANUAL");
+        currentMode = &manual;
+    }
+    currentMode->enter();
+}
+
+bool Mole::isModeToChange() const
+{
+    // switching mode on pushing Y button
+    return ctx.pad.buttonY().justPushed();
 }
 
 void Mole::driveEngines()
 {
-    float rawY = ctx.pad.getLeftJoystick().getY();
-    float rawX = ctx.pad.getLeftJoystick().getX();
-
-    DriveCommand command;
-
-    if (ctx.pad.buttonX().isDown()) {
-        command = getRotationModePowers(rawX, rawY);
-    }
-    else {
-        command = getDriveModePowers(rawX, rawY);
-    }
-
-    float normFactor = max(1.0f, max(fabsf(command.left), fabsf(command.right)));
-    command.left /= normFactor;
-    command.right /= normFactor;
+    DriveCommand command = normalize(currentMode->calculatePower(this->ctx));
 
     int leftPowerForMotor = Mole::toMotorPower(command.left);
     int rightPowerForMotor = Mole::toMotorPower(command.right);
@@ -67,42 +78,18 @@ void Mole::driveEngines()
 
     frontRight.drive(rightPowerForMotor);
     rearRight.drive(rightPowerForMotor);
-
-    // For simulation purposes:
-    Serial.println();
 }
 
-DriveCommand Mole::getDriveModePowers(float rawX, float rawY)
+DriveCommand Mole::normalize(const DriveCommand& cmd)
 {
-    float x = applyCurve(rawX);
-    float y = applyCurve(rawY);
-    if (y < 0) {
-        x = -x;
-    }
-
-    float leftPower = y + (x * Mole::TURN_FACTOR);
-    float rightPower = y - (x * Mole::TURN_FACTOR);
-    
-    float maxPower = std::max(std::abs(leftPower), std::abs(rightPower));
-    if (maxPower > 1.0f) {
-        leftPower  /= maxPower;
-        rightPower /= maxPower;
-    }
-
-    return {leftPower, rightPower};
-}
-
-DriveCommand Mole::getRotationModePowers(float rawX, float rawY)
-{
-    float leftPower = Mole::POWER_FACTOR * rawX;
-    float rightPower = Mole::POWER_FACTOR * (-rawX);
-
-    return {leftPower, rightPower};
-}
-
-float Mole::applyCurve(float v)
-{
-    return v * std::abs(v);
+    const float norm = std::max(
+        1.0f,
+        std::max(
+            fabsf(cmd.left),
+            fabsf(cmd.right)
+        )
+    );
+    return DriveCommand{cmd.left / norm, cmd.right / norm};
 }
 
 int Mole::toMotorPower(float power) {
@@ -115,7 +102,7 @@ int Mole::toMotorPower(float power) {
     return power > 0 ? pwm : -pwm;
 }
 
-void Mole::printPadData() const
+void Mole::printData() const
 {
-    ctx.pad.printData();
+    ctx.printData();
 }

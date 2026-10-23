@@ -56,11 +56,12 @@ void Engine::writeToMotorDriver() const
     digitalWrite(pins.in2, currentPower < 0);
     analogWrite(pins.pwm, abs(currentPower));
 
-    Serial.printf(
-        "C: %4d [%s], T: %4d [%s]   ", 
-        currentPower, getStateName(getCurrentState()).c_str(),
-        targetPower, getStateName(getCurrentState()).c_str()
-    );
+    // Serial.printf(
+    //     "C: %4d [%s], T: %4d [%s]   ", 
+    //     currentPower, getStateName(getCurrentState()).c_str(),
+    //     targetPower, getStateName(getCurrentState()).c_str()
+    // );
+    // Serial.println();
 }
 
 Engine::State Engine::getCurrentState() const
@@ -75,7 +76,7 @@ Engine::State Engine::getCurrentState() const
 }
 
 
-std::string Engine::getStateName(State state) const
+const char* Engine::getStateName(State state)
 {
     switch(state)
     {

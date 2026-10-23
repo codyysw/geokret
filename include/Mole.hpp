@@ -4,28 +4,28 @@
 #include <utility>
 #include <tuple>
 #include "Engine.hpp"
-#include "GamePadInput.hpp"
-#include "DriveMode.hpp"
+#include "IDriveMode.hpp"
+#include "ManualDriver.hpp"
+#include "NaiveAutonomous.hpp"
 
 class Mole
 {
-public: // CONFIGURABLE CONSTANTS
-    static constexpr float TURN_FACTOR = 0.3;
-    static constexpr float POWER_FACTOR = 0.3;
 public:
     Mole();
     void begin();
     void tick(ControllerPtr ctl);
-    void driveEngines();
     void emergencyStop();
-    void printPadData() const;
-
+    void printData() const;
+    Mole(const Mole&) = delete;
 private:
-    DriveCommand getDriveModePowers(float rawX, float rawY);
-    DriveCommand getRotationModePowers(float rawX, float rawY);
-    static float applyCurve(float v);
+    void handleModeSwitching();
+    bool isModeToChange() const;
+    void driveEngines();
+    static DriveCommand normalize(const DriveCommand& cmd);
     static int toMotorPower(float power);
-
+    ManualDriver manual;
+    NaiveAutonomous autonomous;
+    IDriveMode* currentMode;
     DriveContext ctx;
     Engine frontLeft;
     Engine rearLeft;

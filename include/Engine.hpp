@@ -26,7 +26,7 @@ public:
     void drive(int power);
     void stop();
     State getCurrentState() const;
-    std::string getStateName(State state) const;
+    static const char* getStateName(State state);
 
 private:
     void modifyPower();

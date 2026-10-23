@@ -6,7 +6,7 @@
 class Joystick
 {
 public: // CONFIGURABLE CONSTANTS
-    static constexpr float DEADZONE = 0.1;
+    static constexpr float DEADZONE = 0.12;
 public:
     void updatePos(int axisX, int axisY);
     float getX() const { return x; }
@@ -26,7 +26,7 @@ public:
     }
     bool justPushed() const { return (not prevState and currentState); }
     bool justReleased() const { return (prevState and not currentState); }
-    bool isDown() const { return (prevState and currentState); }
+    bool isDown() const { return (currentState); }
 private:
     bool currentState = false;
     bool prevState = false;
@@ -40,10 +40,10 @@ public:
     void printData() const;
     const Joystick& getLeftJoystick() const { return left; }
     const Joystick& getRightJoystick() const { return right; }
-    const Button& buttonX() { return x; }
-    const Button& buttonY() { return y; }
-    const Button& buttonB() { return b; }
-    const Button& buttonA() { return a; }
+    const Button& buttonX() const { return x; }
+    const Button& buttonY() const { return y; }
+    const Button& buttonB() const { return b; }
+    const Button& buttonA() const { return a; }
 
 private:
     Joystick left;

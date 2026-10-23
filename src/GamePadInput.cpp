@@ -32,9 +32,9 @@ void GamePadInput::printData() const
         left.getY(),
         right.getX(),
         right.getY(),
-        x,
-        y,
-        b,
-        a
+        x.isDown(),
+        y.isDown(),
+        b.isDown(),
+        a.isDown()
     );
 }
