@@ -68,7 +68,7 @@ void loop()
     }
     // Helpers::printPadInput(myController);
     mole.tick(myController);
-    mole.printPadData();
+    mole.printData();
 
     delay(DELAY);
 }

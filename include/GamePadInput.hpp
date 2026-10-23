@@ -40,10 +40,10 @@ public:
     void printData() const;
     const Joystick& getLeftJoystick() const { return left; }
     const Joystick& getRightJoystick() const { return right; }
-    const Button& buttonX() { return x; }
-    const Button& buttonY() { return y; }
-    const Button& buttonB() { return b; }
-    const Button& buttonA() { return a; }
+    const Button& buttonX() const { return x; }
+    const Button& buttonY() const { return y; }
+    const Button& buttonB() const { return b; }
+    const Button& buttonA() const { return a; }
 
 private:
     Joystick left;
