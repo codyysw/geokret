@@ -4,12 +4,12 @@ NaiveAutonomous::NaiveAutonomous()
     : IDriveMode(), 
       timer{0}, 
       currentState{State::STOPPED},
-      prevState{State::STOPPED}
+      prevState{State::BACKWARD}
 {
 
 }
 
-void NaiveAutonomous::begin()
+void NaiveAutonomous::enter()
 {
     timer = 0;
     currentState = State::STOPPED;
@@ -55,9 +55,12 @@ void NaiveAutonomous::handleStateSwitching()
             {
                 currentState = State::FORWARD;
             }
-            else 
+            else if (prevState == State::FORWARD)
             {
                 currentState = State::BACKWARD;
+            }
+            else {
+                currentState = State::STOPPED;
             }
     }
     prevState = currentCopy;

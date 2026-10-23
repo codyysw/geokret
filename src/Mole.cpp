@@ -16,7 +16,7 @@ Mole::Mole()
 
 void Mole::begin()
 {
-    currentMode->begin();
+    currentMode->enter();
     
     frontLeft.begin();
     rearLeft.begin();
@@ -38,6 +38,9 @@ void Mole::emergencyStop()
     frontRight.stop();
     rearLeft.stop();
     rearRight.stop();
+
+    currentMode = &manual;
+    currentMode->enter();
 }
 
 void Mole::handleModeSwitching()
@@ -54,7 +57,7 @@ void Mole::handleModeSwitching()
         Serial.println("SWITCH TO MANUAL");
         currentMode = &manual;
     }
-    currentMode->begin();
+    currentMode->enter();
 }
 
 bool Mole::isModeToChange() const

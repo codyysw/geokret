@@ -10,7 +10,7 @@ public: // CONFIGURABLE CONSTANTS
     static constexpr float TURN_POWER = 0.1;
 public:
     NaiveAutonomous();
-    void begin() override;
+    void enter() override;
     DriveCommand calculatePower(const DriveContext& ctx) override;
 private:
     void handleStateSwitching();

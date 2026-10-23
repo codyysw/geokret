@@ -26,7 +26,7 @@ public:
     }
     bool justPushed() const { return (not prevState and currentState); }
     bool justReleased() const { return (prevState and not currentState); }
-    bool isDown() const { return (prevState and currentState); }
+    bool isDown() const { return (currentState); }
 private:
     bool currentState = false;
     bool prevState = false;
