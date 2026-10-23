@@ -5,9 +5,9 @@
 class NaiveAutonomous : public IDriveMode
 {
 public: // CONFIGURABLE CONSTANTS
-    static constexpr int CLOCK_SWITCH = 20;
-    static constexpr int DRIVE_POWER = 70;
-    static constexpr int TURN_POWER = 30;
+    static constexpr int CLOCK_SWITCH = 100;
+    static constexpr float DRIVE_POWER = 0.3;
+    static constexpr float TURN_POWER = 0.1;
 public:
     NaiveAutonomous();
     void begin() override;
@@ -24,6 +24,6 @@ private:
         STOPPED
     };
     int timer;
-    State currentState; 
+    State currentState;
     State prevState;
 };

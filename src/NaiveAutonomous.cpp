@@ -18,14 +18,19 @@ void NaiveAutonomous::begin()
 
 DriveCommand NaiveAutonomous::calculatePower(const DriveContext& ctx)
 {
-    timer += 1;
+    handleStateSwitching();
+
+    timer++;
     switch (currentState)
     {
         case (State::FORWARD):
+            Serial.printf("F");
             return handleForwardMode();
         case (State::BACKWARD):
+            Serial.printf("B");
             return handleBackwardMode();
         default:
+            Serial.printf("S");
             return handleStoppingMode();
     }
 }
@@ -52,10 +57,11 @@ void NaiveAutonomous::handleStateSwitching()
             }
             else 
             {
-                currentState = State::FORWARD;
+                currentState = State::BACKWARD;
             }
     }
     prevState = currentCopy;
+    timer = 0;
 }
 
 DriveCommand NaiveAutonomous::handleForwardMode()

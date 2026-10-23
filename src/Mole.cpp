@@ -11,11 +11,13 @@ Mole::Mole()
       rearRight{Pins::REAR_RIGHT}
 
 {
-    currentMode->begin();
+    
 }
 
 void Mole::begin()
 {
+    currentMode->begin();
+    
     frontLeft.begin();
     rearLeft.begin();
 
@@ -26,6 +28,7 @@ void Mole::begin()
 void Mole::tick(ControllerPtr ctl)
 {
     ctx.update(ctl);
+    handleModeSwitching();
     driveEngines();
 }
 
@@ -43,11 +46,15 @@ void Mole::handleModeSwitching()
         return;
     }
 
-    if (currentMode = &manual) {
+    if (currentMode == &manual) {
+        Serial.println("SWITCH TO AUTO");
         currentMode = &autonomous;
-        return;
     }
-    currentMode = &manual;
+    else {
+        Serial.println("SWITCH TO MANUAL");
+        currentMode = &manual;
+    }
+    currentMode->begin();
 }
 
 bool Mole::isModeToChange() const
