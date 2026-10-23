@@ -13,7 +13,7 @@ void NaiveAutonomous::enter()
 {
     timer = 0;
     currentState = State::STOPPED;
-    prevState = State::STOPPED;
+    prevState = State::BACKWARD;
 }
 
 DriveCommand NaiveAutonomous::calculatePower(const DriveContext& ctx)
