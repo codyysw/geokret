@@ -1,6 +1,10 @@
 #pragma once
 
-constexpr int DELAY = 25;
+
+namespace IntervalsMs {
+    constexpr int ENGINE = 25;
+    constexpr int SENSOR = 10;
+}
 
 struct EnginePins {
     const int pwm;

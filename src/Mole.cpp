@@ -2,7 +2,9 @@
 #include "Config.hpp"
 
 Mole::Mole() 
-    : manual{},
+    : enginesTimer{IntervalsMs::ENGINE},
+      sensorTimer{IntervalsMs::SENSOR},
+      manual{},
       autonomous{},
       currentMode{&manual},
       frontLeft{Pins::FRONT_LEFT}, 
@@ -25,11 +27,13 @@ void Mole::begin()
     rearRight.begin();
 }
 
-void Mole::tick(ControllerPtr ctl)
+void Mole::tick(ControllerPtr ctl, const unsigned long& now)
 {
-    ctx.update(ctl);
-    handleModeSwitching();
-    driveEngines();
+    if (enginesTimer.isReady(now)) {
+        ctx.update(ctl);
+        handleModeSwitching();
+        driveEngines();
+    }
 }
 
 void Mole::emergencyStop()

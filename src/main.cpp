@@ -8,7 +8,7 @@
 ControllerPtr myController = nullptr;
 Mole mole;
 ProximitySensor lidar;
-unsigned long prevTime = 0;
+unsigned long moleTimer = 0;
 
 
 void onConnectedController(ControllerPtr ctl) 
@@ -64,26 +64,21 @@ void setup()
 
 void loop()
 {
-    unsigned long currentTime = millis();
+    unsigned long now = millis();
     bool dataUpdated = BP32.update(); 
 
     if (myController == nullptr or !myController->isConnected()) {
         return;
     }
 
-    if (currentTime - prevTime >= DELAY) {
-        prevTime = currentTime;
+    lidar.updateData();
+    Serial.printf("Distance: %d cm", lidar.getDistance());
+    Serial.println();
 
-        lidar.updateData();
-        Serial.printf("Distance: %d cm", lidar.getDistance());
-        Serial.println();
+    mole.tick(myController, now);
+    mole.printData();
 
-        mole.tick(myController);
-        mole.printData();
-    }
-    if (!dataUpdated) {
-        Serial.println("no data from controller received");
-    }
+    delay(1);
 }
 
 
