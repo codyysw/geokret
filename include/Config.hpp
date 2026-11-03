@@ -13,8 +13,8 @@ struct EnginePins {
 };
 
 struct Lidar1DPins {
-    const int RXD; // Receiving/Data
-    const int TXD; // Transmitting/Clock
+    const int SDA; // Receiving/Data
+    const int SCL; // Transmitting/Clock
 };
 
 
@@ -23,5 +23,5 @@ namespace Pins {
     constexpr EnginePins REAR_LEFT   {23, 22, 21};
     constexpr EnginePins FRONT_LEFT {17, 18, 16};
     constexpr EnginePins REAR_RIGHT  {26, 14, 27};
-    constexpr Lidar1DPins Lidar1D {35,-1};
+    constexpr Lidar1DPins Lidar1D {4,13};
 }

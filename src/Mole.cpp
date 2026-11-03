@@ -20,6 +20,8 @@ void Mole::begin()
 {
     currentMode->enter();
     
+    prox.begin();
+
     frontLeft.begin();
     rearLeft.begin();
 
@@ -27,9 +29,21 @@ void Mole::begin()
     rearRight.begin();
 }
 
-void Mole::tick(ControllerPtr ctl, const unsigned long& now)
+void Mole::tick(ControllerPtr ctl)
 {
-    if (enginesTimer.isReady(now)) {
+    if (sensorTimer.isReady()) {
+        prox.updateData();
+        if (prox.getDistance() > 100) {
+            digitalWrite(LED_BUILTIN,HIGH);
+        }
+        else {
+            digitalWrite(LED_BUILTIN,LOW);
+        }
+    }
+    if (enginesTimer.isReady()) {
+        if (ctl == nullptr or not ctl->isConnected()) {
+            return;
+        }
         ctx.update(ctl);
         handleModeSwitching();
         driveEngines();

@@ -4,7 +4,8 @@ class IntervalTimer
 {
 public:
     explicit IntervalTimer(unsigned long intervalMs) : interval{intervalMs}, lastCall{0} { }
-    bool isReady(const unsigned long& now) {
+    bool isReady() {
+        const unsigned long now = millis();
         if (now - lastCall < interval) {
             return false;
         }

@@ -8,28 +8,33 @@
 #include "ManualDriver.hpp"
 #include "NaiveAutonomous.hpp"
 #include "IntervalTimer.hpp"
+#include "ProximitySensor.hpp"
 
 class Mole
 {
 public:
     Mole();
     void begin();
-    void tick(ControllerPtr ctl, const unsigned long& now);
+    void tick(ControllerPtr ctl);
     void emergencyStop();
     void printData() const;
     Mole(const Mole&) = delete;
+
 private:
     void handleModeSwitching();
     bool isModeToChange() const;
     void driveEngines();
     static DriveCommand normalize(const DriveCommand& cmd);
     static int toMotorPower(float power);
+
     IntervalTimer enginesTimer;
     IntervalTimer sensorTimer;
     ManualDriver manual;
     NaiveAutonomous autonomous;
     IDriveMode* currentMode;
     DriveContext ctx;
+
+    ProximitySensor prox;
     Engine frontLeft;
     Engine rearLeft;
     Engine frontRight;
