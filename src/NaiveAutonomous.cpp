@@ -1,7 +1,8 @@
 #include "NaiveAutonomous.hpp"
 
-NaiveAutonomous::NaiveAutonomous()
-    : IDriveMode(), 
+NaiveAutonomous::NaiveAutonomous(const ProximitySensor& proximity)
+    : IDriveMode(),
+      prox{proximity},
       timer{0}, 
       currentState{State::STOPPED},
       prevState{State::BACKWARD}
@@ -16,11 +17,16 @@ void NaiveAutonomous::enter()
     prevState = State::BACKWARD;
 }
 
-DriveCommand NaiveAutonomous::calculatePower(const DriveContext& ctx)
+DriveCommand NaiveAutonomous::calculatePower()
 {
-    handleStateSwitching();
+    // handleStateSwitching();
 
     timer++;
+    if (prox.getDistance() < 30 or prox.getSignal() < 100) {
+        return handleStoppingMode();
+    }
+    return handleForwardMode();
+    
     switch (currentState)
     {
         case (State::FORWARD):

@@ -4,8 +4,8 @@
 Mole::Mole() 
     : enginesTimer{IntervalsMs::ENGINE},
       sensorTimer{IntervalsMs::SENSOR},
-      manual{},
-      autonomous{},
+      manual{ctx},
+      autonomous{prox},
       currentMode{&manual},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
@@ -86,7 +86,7 @@ bool Mole::isModeToChange() const
 
 void Mole::driveEngines()
 {
-    DriveCommand command = normalize(currentMode->calculatePower(this->ctx));
+    DriveCommand command = normalize(currentMode->calculatePower());
 
     int leftPowerForMotor = Mole::toMotorPower(command.left);
     int rightPowerForMotor = Mole::toMotorPower(command.right);

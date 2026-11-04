@@ -2,7 +2,7 @@
 
 
 
-DriveCommand ManualDriver::calculatePower(const DriveContext& ctx)
+DriveCommand ManualDriver::calculatePower()
 {
     float rawY = ctx.pad.getLeftJoystick().getY();
     float rawX = ctx.pad.getLeftJoystick().getX();
