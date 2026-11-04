@@ -52,7 +52,7 @@ DriveCommand NaiveAutonomous::getCommandForCurrentState() const
         case State::BACKWARD:
             return DriveCommand{-DRIVE_POWER, -DRIVE_POWER};
         case State::TURNING:
-            return DriveCommand{DRIVE_POWER, -DRIVE_POWER};
+            return DriveCommand{TURN_POWER, -TURN_POWER};
         case State::STOPPED:
             return DriveCommand{0,0};
         default:
