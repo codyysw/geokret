@@ -2,8 +2,10 @@
 #include "Config.hpp"
 
 Mole::Mole() 
-    : manual{},
-      autonomous{},
+    : enginesTimer{IntervalsMs::ENGINE},
+      sensorTimer{IntervalsMs::SENSOR},
+      manual{ctx},
+      autonomous{prox},
       currentMode{&manual},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
@@ -18,6 +20,8 @@ void Mole::begin()
 {
     currentMode->enter();
     
+    prox.begin();
+
     frontLeft.begin();
     rearLeft.begin();
 
@@ -27,9 +31,23 @@ void Mole::begin()
 
 void Mole::tick(ControllerPtr ctl)
 {
-    ctx.update(ctl);
-    handleModeSwitching();
-    driveEngines();
+    if (sensorTimer.isReady()) {
+        prox.updateData();
+        if (prox.getDistance() > 100) {
+            digitalWrite(LED_BUILTIN,HIGH);
+        }
+        else {
+            digitalWrite(LED_BUILTIN,LOW);
+        }
+    }
+    if (enginesTimer.isReady()) {
+        if (ctl == nullptr or not ctl->isConnected()) {
+            return;
+        }
+        ctx.update(ctl);
+        handleModeSwitching();
+        driveEngines();
+    }
 }
 
 void Mole::emergencyStop()
@@ -68,7 +86,7 @@ bool Mole::isModeToChange() const
 
 void Mole::driveEngines()
 {
-    DriveCommand command = normalize(currentMode->calculatePower(this->ctx));
+    DriveCommand command = normalize(currentMode->calculatePower());
 
     int leftPowerForMotor = Mole::toMotorPower(command.left);
     int rightPowerForMotor = Mole::toMotorPower(command.right);

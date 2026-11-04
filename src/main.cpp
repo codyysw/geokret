@@ -3,7 +3,7 @@
 #include "Helpers.hpp"
 #include "GamePadInput.hpp"
 #include "Mole.hpp"
-
+#include "ProximitySensor.hpp"
 
 ControllerPtr myController = nullptr;
 Mole mole;
@@ -46,7 +46,7 @@ void setup()
 
     pinMode(LED_BUILTIN, OUTPUT);
     mole.begin();
-    
+
     Serial.printf("Firmware: %s\n", BP32.firmwareVersion());
 
     // const uint8_t* addr = BP32.localBdAddress();
@@ -61,14 +61,25 @@ void setup()
 
 void loop()
 {
-    bool dataUpdated = BP32.update(); 
+    delay(1);
+    BP32.update();
 
-    if (myController == nullptr or !myController->isConnected()) {
-        return;
-    }
-    // Helpers::printPadInput(myController);
     mole.tick(myController);
-    mole.printData();
-
-    delay(DELAY);
 }
+
+// #include <Arduino.h>
+// #include "ProximitySensor.hpp"
+
+// ProximitySensor lidar;
+// void setup() {
+//     Serial.begin(115200);
+//     lidar.begin();
+// }
+
+
+
+// void loop() {
+//     lidar.updateData();
+//     Serial.printf("Dist: %d ; Signal: %d\n", lidar.getDistance(), lidar.getSignal());
+//     delay(10);
+// }

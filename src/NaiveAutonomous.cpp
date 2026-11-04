@@ -1,9 +1,10 @@
 #include "NaiveAutonomous.hpp"
 
-NaiveAutonomous::NaiveAutonomous()
-    : IDriveMode(), 
-      timer{0}, 
-      currentState{State::STOPPED},
+NaiveAutonomous::NaiveAutonomous(const ProximitySensor& proximity)
+    : IDriveMode(),
+      prox{proximity},
+      turnTimer{0}, 
+      currentState{State::FORWARD},
       prevState{State::BACKWARD}
 {
 
@@ -11,73 +12,50 @@ NaiveAutonomous::NaiveAutonomous()
 
 void NaiveAutonomous::enter()
 {
-    timer = 0;
-    currentState = State::STOPPED;
+    turnTimer = 0;
+    currentState = State::FORWARD;
     prevState = State::BACKWARD;
 }
 
-DriveCommand NaiveAutonomous::calculatePower(const DriveContext& ctx)
+DriveCommand NaiveAutonomous::calculatePower()
 {
     handleStateSwitching();
-
-    timer++;
-    switch (currentState)
-    {
-        case (State::FORWARD):
-            Serial.printf("F");
-            return handleForwardMode();
-        case (State::BACKWARD):
-            Serial.printf("B");
-            return handleBackwardMode();
-        default:
-            Serial.printf("S");
-            return handleStoppingMode();
-    }
+    return getCommandForCurrentState();
 }
 
 void NaiveAutonomous::handleStateSwitching()
 {
-    if (timer < CLOCK_SWITCH) {
-        return;
-    }
-    
-    State currentCopy = currentState;
-    switch(currentState)
+    switch (currentState) 
     {
-        case (State::FORWARD):
-            currentState = State::STOPPED;
-            break;
-        case (State::BACKWARD):
-            currentState = State::STOPPED;
-            break;
-        default:
-            if (prevState == State::BACKWARD) 
-            {
-                currentState = State::FORWARD;
+        case State::FORWARD:
+        // TODO implement signal logic in ProximitySensor itself.
+            if (prox.getDistance() < 30 and prox.getSignal() > 100) {
+                currentState = State::TURNING;
             }
-            else if (prevState == State::FORWARD)
-            {
-                currentState = State::BACKWARD;
+            return;
+        case State::TURNING:
+            turnTimer++;
+            if (turnTimer < CLOCK_SWITCH) {
+                return;
             }
-            else {
-                currentState = State::STOPPED;
-            }
+            currentState = State::FORWARD;
+            turnTimer = 0;
     }
-    prevState = currentCopy;
-    timer = 0;
 }
 
-DriveCommand NaiveAutonomous::handleForwardMode()
+DriveCommand NaiveAutonomous::getCommandForCurrentState() const
 {
-    return DriveCommand{DRIVE_POWER, DRIVE_POWER};
-}
-
-DriveCommand NaiveAutonomous::handleBackwardMode()
-{
-    return DriveCommand{-DRIVE_POWER, -DRIVE_POWER};
-}
-
-DriveCommand NaiveAutonomous::handleStoppingMode()
-{
-    return DriveCommand{0, 0};
+    switch (currentState)
+    {
+        case State::FORWARD:
+            return DriveCommand{DRIVE_POWER, DRIVE_POWER};
+        case State::BACKWARD:
+            return DriveCommand{-DRIVE_POWER, -DRIVE_POWER};
+        case State::TURNING:
+            return DriveCommand{TURN_POWER, -TURN_POWER};
+        case State::STOPPED:
+            return DriveCommand{0,0};
+        default:
+            return DriveCommand{0, 0}; // stop on unexpected
+    }
 }
