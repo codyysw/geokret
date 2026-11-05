@@ -36,7 +36,7 @@ private:
     DriveContext ctx;
 
     ProximitySensor prox;
-    StepperMotor tower;
+    StepperMotor turret;
     Engine frontLeft;
     Engine rearLeft;
     Engine frontRight;

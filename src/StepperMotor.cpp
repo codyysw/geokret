@@ -19,12 +19,17 @@ void StepperMotor::tmpMoveWithPad(const DriveContext& ctx)
     float x = ctx.pad.getRightJoystick().getX();
     int32_t maxDist = uint32_t(-1) >> 1;
     if (x < 0) {
-        move(-maxDist);
+        stopped = false;
+        moveTo(-maxDist);
         return;
     }
     if (x > 0) {
-        move(maxDist);
+        stopped = false;
+        moveTo(maxDist);
         return;
     }
-    stop();
+    if (not stopped) {
+        stopped = true;
+        stop();
+    }
 }

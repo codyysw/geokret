@@ -1,3 +1,5 @@
+#pragma once
+
 #include <AccelStepper.h>
 #include "Config.hpp"
 #include "IDriveMode.hpp"
@@ -19,5 +21,7 @@ public:
     long distanceToGo() { return motor.distanceToGo(); }
     void tmpMoveWithPad(const DriveContext& ctx);
 private:
+    // temporary variable for tmp function to move pad.
+    bool stopped = false;
     AccelStepper motor;
 };
