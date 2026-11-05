@@ -6,6 +6,7 @@ Mole::Mole()
       sensorTimer{IntervalsMs::SENSOR},
       manual{ctx},
       autonomous{prox},
+      tower{Pins::ROTATION_TOWER},
       currentMode{&manual},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
@@ -22,6 +23,8 @@ void Mole::begin()
     
     prox.begin();
 
+    tower.begin();
+
     frontLeft.begin();
     rearLeft.begin();
 
@@ -31,6 +34,8 @@ void Mole::begin()
 
 void Mole::tick(ControllerPtr ctl)
 {
+    tower.run();
+
     if (sensorTimer.isReady()) {
         prox.updateData();
         if (prox.getDistance() > 100) {
@@ -45,6 +50,7 @@ void Mole::tick(ControllerPtr ctl)
             return;
         }
         ctx.update(ctl);
+        tower.tmpMoveWithPad(ctx);
         handleModeSwitching();
         driveEngines();
     }

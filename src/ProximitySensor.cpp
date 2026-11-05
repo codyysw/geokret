@@ -5,7 +5,7 @@
 
 void ProximitySensor::begin()
 {
-    Wire.begin(Pins::Lidar1D.SDA, Pins::Lidar1D.SCL);
+    Wire.begin(Pins::LIDAR_1D.SDA, Pins::LIDAR_1D.SCL);
     Wire.setClock(400000);
     Wire.setTimeOut(5);
     Serial.println("connection with LIDAR initialized");

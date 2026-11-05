@@ -4,6 +4,7 @@
 #include <utility>
 #include <tuple>
 #include "Engine.hpp"
+#include "StepperMotor.hpp"
 #include "IDriveMode.hpp"
 #include "ManualDriver.hpp"
 #include "NaiveAutonomous.hpp"
@@ -35,6 +36,7 @@ private:
     DriveContext ctx;
 
     ProximitySensor prox;
+    StepperMotor tower;
     Engine frontLeft;
     Engine rearLeft;
     Engine frontRight;
