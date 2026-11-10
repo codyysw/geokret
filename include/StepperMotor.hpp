@@ -10,6 +10,7 @@ public: // CONFIGURABLE CONSTANTS
     static constexpr int STEPS_PER_ROTATION = 2048;
     static constexpr int MAX_STEPS_PER_SECOND = 512;
     static constexpr int ACCELERATION = 500;
+    static constexpr long RUN_DISTANCE = 1000000000L;
 public:
     StepperMotor(StepperPins pins, AccelStepper::MotorInterfaceType type = AccelStepper::FULL4WIRE);
     void begin();
