@@ -17,9 +17,11 @@ struct DriveContext
     void begin() {
         prox.begin();
     }
-    void update(ControllerPtr ctl) {
-        prox.updateData();
+    void updatePad(ControllerPtr ctl) {
         pad.processData(ctl);
+    }
+    void updateSensors() {
+        prox.updateData();
     }
     void printData() const {
         pad.printData();

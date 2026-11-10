@@ -37,12 +37,13 @@ void Mole::tick(ControllerPtr ctl)
     turret.run();
 
     if (sensorTimer.isReady()) {
-        ctx.update(ctl);
+        ctx.updateSensors();
     }
     if (enginesTimer.isReady()) {
         if (ctl == nullptr or not ctl->isConnected()) {
             return;
         }
+        ctx.updatePad(ctl);
         turret.tmpMoveWithPad(ctx);
         handleModeSwitching();
         driveEngines();
