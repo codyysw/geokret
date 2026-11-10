@@ -10,13 +10,12 @@ public: // CONFIGURABLE CONSTANTS
     static constexpr float DRIVE_POWER = 0.25;
     static constexpr float TURN_POWER = 0.5;
 public:
-    NaiveAutonomous(const ProximitySensor& proximity);
+    NaiveAutonomous(const DriveContext& ctx_);
     void enter() override;
     DriveCommand calculatePower() override;
 private:
     void handleStateSwitching();
     DriveCommand getCommandForCurrentState() const;
-    const ProximitySensor& prox;
     enum class State
     {
         FORWARD,

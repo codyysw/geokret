@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GamePadInput.hpp"
+#include "ProximitySensor.hpp"
 
 struct DriveCommand 
 {
@@ -12,7 +13,12 @@ struct DriveCommand
 struct DriveContext 
 {
     GamePadInput pad;
+    ProximitySensor prox;
+    void begin() {
+        prox.begin();
+    }
     void update(ControllerPtr ctl) {
+        prox.updateData();
         pad.processData(ctl);
     }
     void printData() const {
@@ -22,8 +28,10 @@ struct DriveContext
 
 class IDriveMode
 {
+protected:
+    const DriveContext& ctx;
 public:
-    IDriveMode() = default;
+    IDriveMode(const DriveContext& ctx_) : ctx{ctx_} { }
     virtual ~IDriveMode() = default;
     virtual void enter() { }
     virtual DriveCommand calculatePower() = 0;
