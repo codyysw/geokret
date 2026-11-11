@@ -15,14 +15,20 @@ public:
     StepperMotor(StepperPins pins, AccelStepper::MotorInterfaceType type = AccelStepper::FULL4WIRE);
     void begin();
     bool run() { return motor.run(); }
-    void move(long relative) { motor.move(relative); }
-    void moveTo(long absolute) { motor.moveTo(absolute); }
+    void rotateBy(int degrees);
+    void rotateTo(int degrees);
+    int getAngle() const;
+    int getAngleToGo() const;
     void stop() { motor.stop(); }
-    long currentPosition() { return motor.currentPosition(); }
-    long distanceToGo() { return motor.distanceToGo(); }
-    void tmpMoveWithPad(const DriveContext& ctx);
+    bool isMoving() const { return motor.distanceToGo() != 0; }
+
+    void tmpMoveAround(const DriveContext& ctx);
 private:
-    // temporary variable for tmp function to move pad.
-    bool stopped = false;
-    AccelStepper motor;
+    static int getWrappedSteps(long steps);
+    static int getWrappedDegrees(int degrees);
+    static int stepsToDegrees(long steps);
+    static float degreesToSteps(int degrees);
+    float m_roundAdj = 0;
+    int direction = 1; // temporary variable for tmp function to turn around.
+    mutable AccelStepper motor;
 };

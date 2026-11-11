@@ -44,7 +44,9 @@ void Mole::tick(ControllerPtr ctl)
             return;
         }
         ctx.updatePad(ctl);
-        turret.tmpMoveWithPad(ctx);
+        if (ctx.pad.buttonA().justPushed()) {
+            turret.tmpMoveAround(ctx);
+        }
         handleModeSwitching();
         driveEngines();
     }
