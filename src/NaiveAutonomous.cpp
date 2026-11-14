@@ -1,8 +1,7 @@
 #include "NaiveAutonomous.hpp"
 
-NaiveAutonomous::NaiveAutonomous(const ProximitySensor& proximity)
-    : IDriveMode(),
-      prox{proximity},
+NaiveAutonomous::NaiveAutonomous(const DriveContext& ctx_)
+    : IDriveMode{ctx_},
       turnTimer{0}, 
       currentState{State::FORWARD},
       prevState{State::BACKWARD}
@@ -29,7 +28,7 @@ void NaiveAutonomous::handleStateSwitching()
     {
         case State::FORWARD:
         // TODO implement signal logic in ProximitySensor itself.
-            if (prox.getDistance() < 30 and prox.getSignal() > 100) {
+            if (ctx.prox.getDistance() < 30 and ctx.prox.getSignal() > 100) {
                 currentState = State::TURNING;
             }
             return;
@@ -40,6 +39,9 @@ void NaiveAutonomous::handleStateSwitching()
             }
             currentState = State::FORWARD;
             turnTimer = 0;
+        default:
+            currentState = State::FORWARD;
+            return;
     }
 }
 

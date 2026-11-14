@@ -4,11 +4,11 @@
 #include <utility>
 #include <tuple>
 #include "Engine.hpp"
+#include "StepperMotor.hpp"
 #include "IDriveMode.hpp"
 #include "ManualDriver.hpp"
 #include "NaiveAutonomous.hpp"
 #include "IntervalTimer.hpp"
-#include "ProximitySensor.hpp"
 
 class Mole
 {
@@ -34,7 +34,8 @@ private:
     IDriveMode* currentMode;
     DriveContext ctx;
 
-    ProximitySensor prox;
+    
+    StepperMotor turret;
     Engine frontLeft;
     Engine rearLeft;
     Engine frontRight;
