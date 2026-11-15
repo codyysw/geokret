@@ -5,8 +5,9 @@ Mole::Mole()
     : enginesTimer{IntervalsMs::ENGINE},
       sensorTimer{IntervalsMs::SENSOR},
       manual{ctx},
-      autonomous{prox},
+      autonomous{ctx},
       currentMode{&manual},
+      turret{Pins::ROTATION_TOWER},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
       frontRight{Pins::FRONT_RIGHT},
@@ -20,7 +21,9 @@ void Mole::begin()
 {
     currentMode->enter();
     
-    prox.begin();
+    ctx.begin();
+
+    turret.begin();
 
     frontLeft.begin();
     rearLeft.begin();
@@ -31,20 +34,19 @@ void Mole::begin()
 
 void Mole::tick(ControllerPtr ctl)
 {
+    turret.run();
+
     if (sensorTimer.isReady()) {
-        prox.updateData();
-        if (prox.getDistance() > 100) {
-            digitalWrite(LED_BUILTIN,HIGH);
-        }
-        else {
-            digitalWrite(LED_BUILTIN,LOW);
-        }
+        ctx.updateSensors();
     }
     if (enginesTimer.isReady()) {
         if (ctl == nullptr or not ctl->isConnected()) {
             return;
         }
-        ctx.update(ctl);
+        ctx.updatePad(ctl);
+        if (ctx.pad.buttonA().justPushed()) {
+            turret.tmpMoveAround(ctx);
+        }
         handleModeSwitching();
         driveEngines();
     }

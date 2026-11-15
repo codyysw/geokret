@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Bluepad32.h>
+#include <AccelStepper.h>
 #include "Helpers.hpp"
 #include "GamePadInput.hpp"
 #include "Mole.hpp"
@@ -7,7 +8,6 @@
 
 ControllerPtr myController = nullptr;
 Mole mole;
-
 
 void onConnectedController(ControllerPtr ctl) 
 {
@@ -61,11 +61,12 @@ void setup()
 
 void loop()
 {
-    delay(1);
     BP32.update();
 
     mole.tick(myController);
 }
+
+// !! ---- MYLIDAR TEST
 
 // #include <Arduino.h>
 // #include "ProximitySensor.hpp"
@@ -82,4 +83,58 @@ void loop()
 //     lidar.updateData();
 //     Serial.printf("Dist: %d ; Signal: %d\n", lidar.getDistance(), lidar.getSignal());
 //     delay(10);
+// }
+
+// ! --- ACCELSTEPPER TEST
+
+// #include <Arduino.h>
+// #include <AccelStepper.h>
+// #include "Config.hpp"
+
+// AccelStepper testStepper(
+//     AccelStepper::FULL4WIRE, 
+//     Pins::ROTATION_TOWER.IN1,
+//     Pins::ROTATION_TOWER.IN3,
+//     Pins::ROTATION_TOWER.IN2,
+//     Pins::ROTATION_TOWER.IN4
+// );
+
+// int STEPS_PER_ROTATION = 2048;
+
+// void setup() {
+//     Serial.begin(115200);
+//     testStepper.setMaxSpeed(512.0);
+//     testStepper.setAcceleration(500.0);
+//     delay(5000);
+//     testStepper.moveTo(180*STEPS_PER_ROTATION);
+// }
+
+
+// void loop() {
+//     testStepper.run();
+// }
+
+// ! ---- MYSTEPPER TEST
+
+// #include <Arduino.h>
+// #include "StepperMotor.hpp"
+// #include "Config.hpp"
+
+// StepperMotor myStepper{Pins::ROTATION_TOWER};
+
+
+// void setup() {
+//     Serial.begin(115200);
+//     myStepper.begin();
+//     delay(2000);
+//     //myStepper.moveTo(-(StepperMotor::STEPS_PER_ROTATION / 2));
+// }
+
+// int a = 1;
+// void loop() {
+//     if (myStepper.distanceToGo() == 0) {
+//         myStepper.move(a * StepperMotor::STEPS_PER_ROTATION / 2);
+//         a = -a;
+//     }
+//     myStepper.run();
 // }
