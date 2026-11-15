@@ -2,6 +2,7 @@
 
 #include "GamePadInput.hpp"
 #include "ProximitySensor.hpp"
+#include "HallSensor.hpp"
 
 struct DriveCommand 
 {
@@ -14,8 +15,10 @@ struct DriveContext
 {
     GamePadInput pad;
     ProximitySensor prox;
+    HallSensor hall;
     void begin() {
         prox.begin();
+        hall.begin();
     }
     void updatePad(ControllerPtr ctl) {
         pad.processData(ctl);
