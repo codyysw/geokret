@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 
 namespace IntervalsMs {
     constexpr int ENGINE = 25;
@@ -7,21 +8,21 @@ namespace IntervalsMs {
 }
 
 struct EnginePins {
-    const int pwm;
-    const int in1;
-    const int in2;
+    const uint8_t pwm;
+    const uint8_t in1;
+    const uint8_t in2;
 };
 
 struct StepperPins {
-    const int IN1;
-    const int IN2;
-    const int IN3;
-    const int IN4;
+    const uint8_t IN1;
+    const uint8_t IN2;
+    const uint8_t IN3;
+    const uint8_t IN4;
 };
 
 struct Lidar1DPins {
-    const int SDA; // Receiving/Data
-    const int SCL; // Transmitting/Clock
+    const uint8_t SDA;
+    const uint8_t SCL;
 };
 
 namespace Pins {

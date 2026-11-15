@@ -41,6 +41,7 @@ void Mole::tick(ControllerPtr ctl)
     }
     if (enginesTimer.isReady()) {
         if (ctl == nullptr or not ctl->isConnected()) {
+            emergencyStop();
             return;
         }
         ctx.updatePad(ctl);
@@ -59,6 +60,9 @@ void Mole::emergencyStop()
     rearLeft.stop();
     rearRight.stop();
 
+    if (currentMode == &manual) {
+        return;
+    }
     currentMode = &manual;
     currentMode->enter();
 }
@@ -68,13 +72,10 @@ void Mole::handleModeSwitching()
     if (not isModeToChange()) {
         return;
     }
-
     if (currentMode == &manual) {
-        Serial.println("SWITCH TO AUTO");
         currentMode = &autonomous;
     }
     else {
-        Serial.println("SWITCH TO MANUAL");
         currentMode = &manual;
     }
     currentMode->enter();
