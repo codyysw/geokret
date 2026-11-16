@@ -1,5 +1,10 @@
 #include "TurretManualMode.hpp"
 
+void TurretManualMode::enter()
+{
+    turret.stop();
+}
+
 void TurretManualMode::updateTurretTarget()
 {
     float x = ctx.pad.getRightJoystick().getX();

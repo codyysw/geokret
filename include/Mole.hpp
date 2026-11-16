@@ -4,6 +4,7 @@
 #include <utility>
 #include <tuple>
 #include "Engine.hpp"
+#include "DriveTrain.hpp"
 #include "StepperMotor.hpp"
 #include "IDriveMode.hpp"
 #include "ManualDriver.hpp"
@@ -28,8 +29,6 @@ private:
     void handleModeSwitching();
     bool isModeToChange() const;
     void driveEngines();
-    static DriveCommand normalize(const DriveCommand& cmd);
-    static int toMotorPower(float power);
 
     IntervalTimer enginesTimer;
     IntervalTimer sensorTimer;
@@ -44,8 +43,5 @@ private:
 
     
     StepperMotor turret;
-    Engine frontLeft;
-    Engine rearLeft;
-    Engine frontRight;
-    Engine rearRight;
+    DriveTrain mainDriveTrain;
 };
