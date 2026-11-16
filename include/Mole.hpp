@@ -8,6 +8,10 @@
 #include "IDriveMode.hpp"
 #include "ManualDriver.hpp"
 #include "NaiveAutonomous.hpp"
+#include "ITurretMode.hpp"
+#include "TurretManualMode.hpp"
+#include "TurretSweepMode.hpp"
+#include "TurretHomingMode.hpp"
 #include "IntervalTimer.hpp"
 
 class Mole
@@ -29,10 +33,14 @@ private:
 
     IntervalTimer enginesTimer;
     IntervalTimer sensorTimer;
-    ManualDriver manual;
-    NaiveAutonomous autonomous;
-    IDriveMode* currentMode;
-    DriveContext ctx;
+    ManualDriver manualDrive;
+    NaiveAutonomous autonomousDrive;
+    IDriveMode* currentDriveMode;
+    TurretManualMode manualTurret;
+    TurretSweepMode sweepTurret;
+    TurretHomingMode homingTurret;
+    ITurretMode* currentTurretMode;
+    MoleContext ctx;
 
     
     StepperMotor turret;

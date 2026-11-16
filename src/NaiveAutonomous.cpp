@@ -1,6 +1,6 @@
 #include "NaiveAutonomous.hpp"
 
-NaiveAutonomous::NaiveAutonomous(const DriveContext& ctx_)
+NaiveAutonomous::NaiveAutonomous(const MoleContext& ctx_)
     : IDriveMode{ctx_},
       turnTimer{0}, 
       currentState{State::FORWARD},

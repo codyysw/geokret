@@ -32,5 +32,5 @@ namespace Pins {
     constexpr EnginePins REAR_RIGHT  {26, 14, 27};
     constexpr StepperPins ROTATION_TOWER {5, 19, 15, 2};
     constexpr Lidar1DPins LIDAR_1D {4,13};
-    constexpr int HALL_SENSOR {-1};
+    constexpr int HALL_SENSOR {34};
 }

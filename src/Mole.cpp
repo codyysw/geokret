@@ -4,9 +4,13 @@
 Mole::Mole() 
     : enginesTimer{IntervalsMs::ENGINE},
       sensorTimer{IntervalsMs::SENSOR},
-      manual{ctx},
-      autonomous{ctx},
-      currentMode{&manual},
+      manualDrive{ctx},
+      autonomousDrive{ctx},
+      currentDriveMode{&manualDrive},
+      manualTurret{ctx, turret},
+      sweepTurret{ctx, turret},
+      homingTurret{ctx, turret},
+      currentTurretMode{&homingTurret},
       turret{Pins::ROTATION_TOWER},
       frontLeft{Pins::FRONT_LEFT}, 
       rearLeft{Pins::REAR_LEFT},
@@ -19,8 +23,9 @@ Mole::Mole()
 
 void Mole::begin()
 {
-    currentMode->enter();
-    
+    currentDriveMode->enter();
+    currentTurretMode->enter();
+
     ctx.begin();
 
     turret.begin();
@@ -38,6 +43,7 @@ void Mole::tick(ControllerPtr ctl)
 
     if (sensorTimer.isReady()) {
         ctx.updateSensors();
+        currentTurretMode->updateTurretTarget();
     }
     if (enginesTimer.isReady()) {
         if (ctl == nullptr or not ctl->isConnected()) {
@@ -45,9 +51,9 @@ void Mole::tick(ControllerPtr ctl)
             return;
         }
         ctx.updatePad(ctl);
-        if (ctx.pad.buttonA().justPushed()) {
-            turret.tmpMoveAround(ctx);
-        }
+        // if (ctx.pad.buttonA().justPushed()) {
+        //     turret.tmpMoveAround(ctx);
+        // }
         handleModeSwitching();
         driveEngines();
     }
@@ -60,11 +66,11 @@ void Mole::emergencyStop()
     rearLeft.stop();
     rearRight.stop();
 
-    if (currentMode == &manual) {
+    if (currentDriveMode == &manualDrive) {
         return;
     }
-    currentMode = &manual;
-    currentMode->enter();
+    currentDriveMode = &manualDrive;
+    currentDriveMode->enter();
 }
 
 void Mole::handleModeSwitching()
@@ -72,13 +78,13 @@ void Mole::handleModeSwitching()
     if (not isModeToChange()) {
         return;
     }
-    if (currentMode == &manual) {
-        currentMode = &autonomous;
+    if (currentDriveMode == &manualDrive) {
+        currentDriveMode = &autonomousDrive;
     }
     else {
-        currentMode = &manual;
+        currentDriveMode = &manualDrive;
     }
-    currentMode->enter();
+    currentDriveMode->enter();
 }
 
 bool Mole::isModeToChange() const
@@ -89,7 +95,7 @@ bool Mole::isModeToChange() const
 
 void Mole::driveEngines()
 {
-    DriveCommand command = normalize(currentMode->calculatePower());
+    DriveCommand command = normalize(currentDriveMode->calculatePower());
 
     int leftPowerForMotor = Mole::toMotorPower(command.left);
     int rightPowerForMotor = Mole::toMotorPower(command.right);

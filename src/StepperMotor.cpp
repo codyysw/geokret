@@ -67,28 +67,28 @@ void StepperMotor::rotateTo(int degrees)
     rotateBy(degreesWrapped - currentAngle);
 }
 
-void StepperMotor::tmpMoveAround(const DriveContext& ctx)
-{
-    if (isMoving()) {
-        return;
-    }
-    this->rotateBy(direction*360);
-    direction = -direction;
-    return;
+// void StepperMotor::tmpMoveAround(const MoleContext& ctx)
+// {
+//     if (isMoving()) {
+//         return;
+//     }
+//     this->rotateBy(direction*360);
+//     direction = -direction;
+//     return;
 
-    float x = ctx.pad.getRightJoystick().getX();
-    if (x < 0) {
-        direction = false;
-        motor.moveTo(-RUN_DISTANCE);
-        return;
-    }
-    if (x > 0) {
-        direction = false;
-        motor.moveTo(RUN_DISTANCE);
-        return;
-    }
-    if (not direction) {
-        direction = true;
-        stop();
-    }
-}
+//     float x = ctx.pad.getRightJoystick().getX();
+//     if (x < 0) {
+//         direction = false;
+//         motor.moveTo(-RUN_DISTANCE);
+//         return;
+//     }
+//     if (x > 0) {
+//         direction = false;
+//         motor.moveTo(RUN_DISTANCE);
+//         return;
+//     }
+//     if (not direction) {
+//         direction = true;
+//         stop();
+//     }
+// }

@@ -2,7 +2,7 @@
 
 #include <AccelStepper.h>
 #include "Config.hpp"
-#include "IDriveMode.hpp"
+// #include "IDriveMode.hpp"
 
 class StepperMotor
 {
@@ -17,12 +17,13 @@ public:
     bool run() { return motor.run(); }
     void rotateBy(int degrees);
     void rotateTo(int degrees);
+    void setZeroHere() { motor.setCurrentPosition(0); m_roundAdj = 0; }
     int getAngle() const;
     int getAngleToGo() const;
     void stop() { motor.stop(); }
     bool isMoving() const { return motor.distanceToGo() != 0; }
 
-    void tmpMoveAround(const DriveContext& ctx);
+    //void tmpMoveAround(const MoleContext& ctx);
 private:
     static int getWrappedSteps(long steps);
     static int getWrappedDegrees(int degrees);

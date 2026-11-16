@@ -11,7 +11,7 @@ struct DriveCommand
     float right;
 };
 
-struct DriveContext 
+struct MoleContext 
 {
     GamePadInput pad;
     ProximitySensor prox;
@@ -34,9 +34,9 @@ struct DriveContext
 class IDriveMode
 {
 protected:
-    const DriveContext& ctx;
+    const MoleContext& ctx;
 public:
-    IDriveMode(const DriveContext& ctx_) : ctx{ctx_} { }
+    IDriveMode(const MoleContext& ctx_) : ctx{ctx_} { }
     virtual ~IDriveMode() = default;
     virtual void enter() { }
     virtual DriveCommand calculatePower() = 0;
