@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
 #include <Bluepad32.h>
 
 class Joystick

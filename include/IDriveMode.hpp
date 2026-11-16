@@ -1,45 +1,7 @@
 #pragma once
 
-#include "GamePadInput.hpp"
-#include "ProximitySensor.hpp"
-#include "HallSensor.hpp"
-
-struct DriveCommand
-{
-    constexpr DriveCommand(float l = 0, float r = 0) : left(l), right(r) { }
-    DriveCommand getNormalized() const{
-        const float norm = std::max(
-            1.0f,
-            std::max(
-                fabsf(left),
-                fabsf(right)
-            )
-        );
-        return DriveCommand{left / norm, right / norm};
-    }
-    float left;
-    float right;
-};
-
-struct MoleContext 
-{
-    GamePadInput pad;
-    ProximitySensor prox;
-    HallSensor hall;
-    void begin() {
-        prox.begin();
-        hall.begin();
-    }
-    void updatePad(ControllerPtr ctl) {
-        pad.processData(ctl);
-    }
-    void updateSensors() {
-        prox.updateData();
-    }
-    void printData() const {
-        pad.printData();
-    }
-};
+#include "MoleContext.hpp"
+#include "DriveCommand.hpp"
 
 class IDriveMode
 {

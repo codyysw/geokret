@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 #include "ProximitySensor.hpp"
 #include "Config.hpp"
 

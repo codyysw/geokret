@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IDriveMode.hpp"
-#include "ProximitySensor.hpp"
 
 class NaiveAutonomous : public IDriveMode
 {

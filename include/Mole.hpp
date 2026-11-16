@@ -1,9 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-#include <utility>
-#include <tuple>
-#include "Engine.hpp"
 #include "DriveTrain.hpp"
 #include "StepperMotor.hpp"
 #include "IDriveMode.hpp"
@@ -32,16 +28,17 @@ private:
 
     IntervalTimer enginesTimer;
     IntervalTimer sensorTimer;
+    
+    MoleContext ctx;
+    StepperMotor turret;
+    DriveTrain mainDriveTrain;
+
     ManualDriver manualDrive;
     NaiveAutonomous autonomousDrive;
     IDriveMode* currentDriveMode;
+
     TurretManualMode manualTurret;
     TurretSweepMode sweepTurret;
     TurretHomingMode homingTurret;
     ITurretMode* currentTurretMode;
-    MoleContext ctx;
-
-    
-    StepperMotor turret;
-    DriveTrain mainDriveTrain;
 };

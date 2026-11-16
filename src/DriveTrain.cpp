@@ -1,3 +1,6 @@
+#include <Arduino.h>
+#include <cmath>
+
 #include "DriveTrain.hpp"
 #include "Config.hpp"
 

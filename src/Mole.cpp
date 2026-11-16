@@ -4,15 +4,15 @@
 Mole::Mole() 
     : enginesTimer{IntervalsMs::ENGINE},
       sensorTimer{IntervalsMs::SENSOR},
+      turret{Pins::ROTATION_TOWER},
+      mainDriveTrain{},
       manualDrive{ctx},
       autonomousDrive{ctx},
       currentDriveMode{&manualDrive},
       manualTurret{ctx, turret},
       sweepTurret{ctx, turret},
       homingTurret{ctx, turret},
-      currentTurretMode{&homingTurret},
-      turret{Pins::ROTATION_TOWER},
-      mainDriveTrain{}
+      currentTurretMode{&homingTurret}
 {
     
 }
