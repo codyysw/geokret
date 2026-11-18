@@ -12,7 +12,82 @@ void StepperMotor::begin()
     motor.setAcceleration(ACCELERATION);
     motor.setMaxSpeed(MAX_STEPS_PER_SECOND);
     m_roundAdj = 0;
+    m_constantSpeedMode = false;
     // TODO it should be recentered using hall sensor at the beginning
+}
+
+bool StepperMotor::run()
+{
+    if (m_constantSpeedMode) {
+        return motor.runSpeed();
+    }
+    return motor.run();
+}
+
+void StepperMotor::rotateBy(int degrees)
+{
+    m_constantSpeedMode = false;
+    float stepsToGo = degreesToSteps(degrees);
+    int stepsToGoRounded = static_cast<int>(roundf(stepsToGo));
+    m_roundAdj += (stepsToGo - stepsToGoRounded);
+    int adjToAdd = static_cast<int>(m_roundAdj);
+    m_roundAdj -= adjToAdd;
+    long delta = stepsToGoRounded + adjToAdd;
+    motor.moveTo(motor.targetPosition() + delta);
+}
+
+void StepperMotor::rotateTo(int degrees)
+{
+    m_constantSpeedMode = false;
+    int degreesWrapped = getWrappedDegrees(degrees);
+    int currentAngle = getAngle();
+    rotateBy(degreesWrapped - currentAngle);
+}
+
+void StepperMotor::rotateWithConstantSpeed(long stepsPerSecond)
+{
+    if (stepsPerSecond > MAX_STEPS_PER_SECOND) {
+        return;
+    }
+    m_constantSpeedMode = true;
+    motor.setSpeed(stepsPerSecond);
+}
+
+void StepperMotor::stop()
+{
+    if (m_constantSpeedMode) {
+        motor.setSpeed(0);
+        motor.setCurrentPosition(motor.currentPosition());
+        m_constantSpeedMode = false;
+        return;
+    }
+    motor.stop();
+}
+
+bool StepperMotor::isMoving() const
+{
+    if (m_constantSpeedMode) {
+        return motor.speed() != 0.0f;
+    }
+    return motor.distanceToGo() != 0;
+}
+
+void StepperMotor::setZeroHere()
+{
+    m_constantSpeedMode = false;
+    motor.setSpeed(0);
+    motor.setCurrentPosition(0);
+    m_roundAdj = 0;
+}
+
+int StepperMotor::getAngle() const
+{
+    return stepsToDegrees(motor.currentPosition());
+}
+
+int StepperMotor::getAngleToGo() const
+{
+    return stepsToDegrees(motor.distanceToGo());
 }
 
 int StepperMotor::getWrappedSteps(long steps)
@@ -38,57 +113,3 @@ float StepperMotor::degreesToSteps(int degrees)
 {
     return degrees * (STEPS_PER_ROTATION / 360.0f);
 }
-
-int StepperMotor::getAngle() const
-{
-    return stepsToDegrees(motor.currentPosition());
-}
-
-int StepperMotor::getAngleToGo() const
-{
-    return stepsToDegrees(motor.distanceToGo());
-}
-
-void StepperMotor::rotateBy(int degrees)
-{
-    float stepsToGo = degreesToSteps(degrees);
-    int stepsToGoRounded = static_cast<int>(roundf(stepsToGo));
-    m_roundAdj += (stepsToGo - stepsToGoRounded);
-    int adjToAdd = static_cast<int>(m_roundAdj);
-    m_roundAdj -= adjToAdd;
-    long delta = stepsToGoRounded + adjToAdd;
-    motor.moveTo(motor.targetPosition() + delta);
-}
-
-void StepperMotor::rotateTo(int degrees)
-{
-    int degreesWrapped = getWrappedDegrees(degrees);
-    int currentAngle = getAngle();
-    rotateBy(degreesWrapped - currentAngle);
-}
-
-// void StepperMotor::tmpMoveAround(const MoleContext& ctx)
-// {
-//     if (isMoving()) {
-//         return;
-//     }
-//     this->rotateBy(direction*360);
-//     direction = -direction;
-//     return;
-
-//     float x = ctx.pad.getRightJoystick().getX();
-//     if (x < 0) {
-//         direction = false;
-//         motor.moveTo(-RUN_DISTANCE);
-//         return;
-//     }
-//     if (x > 0) {
-//         direction = false;
-//         motor.moveTo(RUN_DISTANCE);
-//         return;
-//     }
-//     if (not direction) {
-//         direction = true;
-//         stop();
-//     }
-// }
