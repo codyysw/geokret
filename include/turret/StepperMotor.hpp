@@ -2,7 +2,6 @@
 
 #include <AccelStepper.h>
 #include "Config.hpp"
-#include "IDriveMode.hpp"
 
 class StepperMotor
 {
@@ -14,21 +13,21 @@ public: // CONFIGURABLE CONSTANTS
 public:
     StepperMotor(StepperPins pins, AccelStepper::MotorInterfaceType type = AccelStepper::FULL4WIRE);
     void begin();
-    bool run() { return motor.run(); }
+    bool run();
     void rotateBy(int degrees);
     void rotateTo(int degrees);
+    void rotateWithConstantSpeed(long stepsPerSecond);
+    void setZeroHere();
     int getAngle() const;
     int getAngleToGo() const;
-    void stop() { motor.stop(); }
-    bool isMoving() const { return motor.distanceToGo() != 0; }
-
-    void tmpMoveAround(const DriveContext& ctx);
+    void stop();
+    bool isMoving() const;
 private:
     static int getWrappedSteps(long steps);
     static int getWrappedDegrees(int degrees);
     static int stepsToDegrees(long steps);
     static float degreesToSteps(int degrees);
     float m_roundAdj = 0;
-    int direction = 1; // temporary variable for tmp function to turn around.
+    bool m_constantSpeedMode = false;
     mutable AccelStepper motor;
 };
