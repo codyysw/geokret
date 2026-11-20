@@ -24,7 +24,8 @@ public:
 
 private:
     void handleModeSwitching();
-    bool isModeToChange() const;
+    void switchDriveMode();
+    void switchTurretMode();
     void driveEngines();
     void queueScanToHost();
 

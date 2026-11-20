@@ -36,7 +36,6 @@ void Mole::begin()
 void Mole::tick(ControllerPtr ctl)
 {
     turret.run();
-    
 
     if (sensorTimer.isReady()) {
         ctx.updateSensors();
@@ -50,9 +49,6 @@ void Mole::tick(ControllerPtr ctl)
             return;
         }
         ctx.updatePad(ctl);
-        // if (ctx.pad.buttonA().justPushed()) {
-        //     turret.tmpMoveAround(ctx);
-        // }
         handleModeSwitching();
         driveEngines();
     }
@@ -74,7 +70,13 @@ void Mole::emergencyStop()
 
 void Mole::handleModeSwitching()
 {
-    if (not isModeToChange()) {
+    switchDriveMode();
+    switchTurretMode();
+}
+
+void Mole::switchDriveMode()
+{
+    if (not ctx.pad.buttonY().justPushed()) {
         return;
     }
     if (currentDriveMode == &manualDrive) {
@@ -86,12 +88,26 @@ void Mole::handleModeSwitching()
     currentDriveMode->enter();
 }
 
-bool Mole::isModeToChange() const
+void Mole::switchTurretMode()
 {
-    // switching mode on pushing Y button
-    return ctx.pad.buttonY().justPushed();
+    if (ctx.pad.buttonA().justPushed()) {
+        if (currentTurretMode == &manualTurret) {
+            currentTurretMode = &sweepTurret;
+        }
+        else {
+            currentTurretMode = &manualTurret;
+        }
+        currentTurretMode->enter();
+        return;
+    }
+    if (ctx.pad.buttonB().justPushed()) {
+        if (currentTurretMode != &homingTurret) {
+            currentTurretMode = &homingTurret;
+        }
+        currentTurretMode->enter();
+    }
+    
 }
-
 void Mole::driveEngines()
 {
     DriveCommand command = currentDriveMode->calculatePower();
