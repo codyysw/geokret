@@ -1,13 +1,16 @@
 #include <Arduino.h>
 #include <Bluepad32.h>
 #include <AccelStepper.h>
+
 #include "Helpers.hpp"
 #include "GamePadInput.hpp"
 #include "Mole.hpp"
 #include "ProximitySensor.hpp"
+#include "UdpLink.hpp"
 
 ControllerPtr myController = nullptr;
-Mole mole;
+UdpLink udp;
+Mole mole{udp};
 
 void onConnectedController(ControllerPtr ctl) 
 {

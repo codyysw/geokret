@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cstdint>
-#include <WiFi.h>
 #include <WiFiUdp.h>
-
+#include <cstdint>
 #include "ILink.hpp"
 
 class UdpLink : public ILink

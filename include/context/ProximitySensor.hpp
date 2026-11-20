@@ -5,7 +5,7 @@
 
 class ProximitySensor
 {
-public:
+public: // CONFIGURABLE CONSTANTS
     static constexpr int16_t MAX_DISTANCE = 800;
     static constexpr uint16_t MIN_SIGNAL   = 100;
     void begin();

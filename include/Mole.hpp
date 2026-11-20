@@ -10,11 +10,12 @@
 #include "TurretSweepMode.hpp"
 #include "TurretHomingMode.hpp"
 #include "IntervalTimer.hpp"
+#include "HostComm.hpp"
 
 class Mole
 {
 public:
-    Mole();
+    Mole(ILink& ilink);
     void begin();
     void tick(ControllerPtr ctl);
     void emergencyStop();
@@ -25,6 +26,7 @@ private:
     void handleModeSwitching();
     bool isModeToChange() const;
     void driveEngines();
+    void queueScanToHost();
 
     IntervalTimer enginesTimer;
     IntervalTimer sensorTimer;
@@ -41,4 +43,6 @@ private:
     TurretSweepMode sweepTurret;
     TurretHomingMode homingTurret;
     ITurretMode* currentTurretMode;
+
+    HostComm host;
 };

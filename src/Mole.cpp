@@ -1,7 +1,8 @@
 #include "Mole.hpp"
 #include "Config.hpp"
+#include "Protocol.hpp"
 
-Mole::Mole() 
+Mole::Mole(ILink& ilink) 
     : enginesTimer{IntervalsMs::ENGINE},
       sensorTimer{IntervalsMs::SENSOR},
       turret{Pins::ROTATION_TOWER},
@@ -12,9 +13,10 @@ Mole::Mole()
       manualTurret{ctx, turret},
       sweepTurret{ctx, turret},
       homingTurret{ctx, turret},
-      currentTurretMode{&homingTurret}
+      currentTurretMode{&homingTurret},
+      host{ilink}
 {
-    
+
 }
 
 void Mole::begin()
@@ -27,15 +29,20 @@ void Mole::begin()
     turret.begin();
 
     mainDriveTrain.begin();
+
+    host.begin();
 }
 
 void Mole::tick(ControllerPtr ctl)
 {
     turret.run();
+    
 
     if (sensorTimer.isReady()) {
         ctx.updateSensors();
         currentTurretMode->updateTurretTarget();
+        queueScanToHost();
+        host.update();
     }
     if (enginesTimer.isReady()) {
         if (ctl == nullptr or not ctl->isConnected()) {
@@ -95,4 +102,16 @@ void Mole::driveEngines()
 void Mole::printData() const
 {
     ctx.printData();
+}
+
+void Mole::queueScanToHost()
+{
+    Packets::ScanPoint scan
+    {
+        turret.getAngle(),
+        ctx.prox.getDistance(),
+        ctx.prox.getSignal(),
+        millis()
+    };
+    host.queueScan(scan);
 }
